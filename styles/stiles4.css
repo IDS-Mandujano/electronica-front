@@ -1,0 +1,285 @@
+/* --- Global Styles and Variables --- */
+:root {
+    --primary-color: #007bff; /* Blue for buttons/accents */
+    --secondary-color: #f8f9fa; /* Light gray background */
+    --dark-bg: #343a40; /* Dark sidebar/header background */
+    --text-light: #ffffff;
+    --text-dark: #212529;
+    --card-bg: #ffffff;
+    --border-color: #dee2e6;
+    
+    /* Status Colors */
+    --status-process: #ffc107; /* Yellow */
+    --status-pending: #20c997; /* Teal/Light Green */
+    --status-important: #dc3545; /* Red */
+    --status-finished: #007bff; /* Blue */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-dark);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- Header Styling --- */
+.header {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px; /* Adjust size */
+    margin-right: 15px;
+}
+
+.logo-area h1 {
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.user-info i {
+    font-size: 1.8rem;
+    margin: 0 10px;
+}
+
+.cerrar-sesion {
+    color: #dc3545; /* Red color for log out */
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+/* --- Main Layout (Sidebar + Content) --- */
+.main-layout {
+    display: flex;
+    flex-grow: 1;
+}
+
+/* --- Sidebar Styling --- */
+.sidebar {
+    width: 250px;
+    background-color: #f8f9fa; /* Light background as seen in image */
+    padding-top: 20px;
+    border-right: 1px solid var(--border-color);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.nav-item i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.nav-item:hover, .nav-item.active {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+/* Specific styling for the active menu button (Menú Principal) */
+.nav-item:first-child { 
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border-radius: 0 25px 25px 0; /* Rounded right edge */
+    margin-right: 20px; /* Pull it slightly into the sidebar to show the curve */
+}
+.nav-item:first-child i {
+    font-size: 1.2rem;
+}
+
+/* --- Main Content Styling --- */
+.content {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: #ffffff; /* White background for the main content area */
+}
+
+.content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #495057; /* Darker gray for headers */
+}
+
+/* --- Quick Summary Section --- */
+.quick-summary h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card .value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--text-dark);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.card p {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Icon placement and styling for summary cards */
+.card i {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 3rem;
+    opacity: 0.2;
+}
+
+.icon-pending { color: var(--status-pending); }
+.icon-process { color: var(--status-process); }
+.icon-finished { color: var(--status-finished); }
+.icon-low-stock { color: var(--status-important); }
+
+.card.warning {
+    border-left: 5px solid var(--status-important);
+}
+
+/* --- Assigned Orders Section (Table) --- */
+.assigned-orders h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+thead th {
+    background-color: var(--secondary-color);
+    font-weight: 600;
+    color: #495057;
+}
+
+tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.status-label {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+}
+
+.status-label::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.status-process::before { background-color: var(--status-process); }
+.status-pending::before { background-color: var(--status-pending); }
+.status-important::before { background-color: var(--status-important); }
+.status-finished::before { background-color: var(--status-finished); }
+
+.btn-action {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.btn-action:hover {
+    background-color: #0056b3;
+}
+
+/* --- Footer Actions --- */
+.footer-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.btn-footer {
+    background-color: #e9ecef;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.btn-footer i {
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+.btn-footer:hover {
+    background-color: #dee2e6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}

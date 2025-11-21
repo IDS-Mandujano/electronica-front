@@ -1,0 +1,117 @@
+.modal-producto-scope .modal-backdrop {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-producto-scope .modal-content {
+    background-color: #ffffff;
+    padding: 30px 35px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 90%;
+    max-width: 550px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slide-down 0.3s ease-out;
+}
+
+.modal-producto-scope .modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.modal-producto-scope .modal-close:hover {
+    color: #333;
+}
+
+.modal-producto-scope .modal-header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    color: #1e2d3b;
+}
+.modal-producto-scope .modal-header-title h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+.modal-producto-scope .user-icon-small {
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    padding: 3px 8px;
+    font-size: 16px;
+    line-height: 1;
+    color: #555;
+}
+.modal-producto-scope .modal-content h3 {
+    font-size: 16px;
+    color: #1e2d3b;
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* Formulario específico de PRODUCTO */
+.modal-producto-scope #form-registro-producto {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-producto-scope #form-registro-producto label {
+    font-weight: 500;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: -8px;
+}
+
+.modal-producto-scope #form-registro-producto input[type="text"],
+.modal-producto-scope #form-registro-producto input[type="number"],
+.modal-producto-scope #form-registro-producto input[type="date"],
+.modal-producto-scope #form-registro-producto select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fcfcfc;
+}
+
+.modal-producto-scope .form-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-top: 30px;
+}
+.modal-producto-scope .form-buttons button {
+    padding: 10px 22px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.modal-producto-scope .form-buttons .btn-submit {
+    background-color: #fd7e14;
+    color: white;
+}
+.modal-producto-scope .form-buttons .btn-cancel {
+    background-color: #f1f1f1;
+    color: #333;
+}

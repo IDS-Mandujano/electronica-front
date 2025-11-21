@@ -1,0 +1,150 @@
+/* ========================================= */
+/* ESTILOS PARA MODAL EDITAR ESTADO */
+/* ========================================= */
+
+/* Fondo oscuro (Backdrop) */
+.modal-editar-estado-scope .modal-backdrop {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    animation: fadeInBackdrop 0.3s ease;
+}
+
+/* Contenedor de la modal */
+.modal-editar-estado-scope .modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 90%;
+    max-width: 500px; /* Un poco más angosta que las de registro */
+    animation: slideDown 0.3s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Encabezado */
+.modal-editar-estado-scope .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.modal-editar-estado-scope .modal-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.modal-editar-estado-scope .btn-close {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-editar-estado-scope .btn-close:hover {
+    color: #333;
+}
+
+/* Grupos de formulario */
+.modal-editar-estado-scope .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.modal-editar-estado-scope label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.modal-editar-estado-scope input,
+.modal-editar-estado-scope select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.modal-editar-estado-scope input:focus,
+.modal-editar-estado-scope select:focus {
+    border-color: #007bff;
+}
+
+/* Estilo especial para campos de solo lectura */
+.modal-editar-estado-scope .input-readonly {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-color: #e9ecef;
+    cursor: not-allowed;
+    font-weight: 500;
+}
+
+/* Pie de modal (Botones) */
+.modal-editar-estado-scope .modal-footer {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.modal-editar-estado-scope .btn-cancel {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.modal-editar-estado-scope .btn-cancel:hover {
+    background-color: #5a6268;
+}
+
+.modal-editar-estado-scope .btn-submit {
+    background-color: #007bff; /* Azul para guardar */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.modal-editar-estado-scope .btn-submit:hover {
+    background-color: #0056b3;
+}
+
+/* Animaciones */
+@keyframes fadeInBackdrop {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

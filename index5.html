@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELECTRONICA DOMESTICA - Inventario</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-area">
+                <img src="logo.png" alt="Logo Electronica Domestica" class="logo"> 
+                <h1>ELECTRONICA DOMESTICA</h1>
+            </div>
+            <div class="user-info">
+                <span>Ing. José Ángel Benavente Ruiz</span>
+                <i class="fas fa-user-circle"></i>
+                <a href="#" class="cerrar-sesion">Cerrar sesión</a>
+            </div>
+        </header>
+
+        <main class="main-layout">
+            <nav class="sidebar">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-bars"></i>
+                    Menú Principal
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    Pedidos
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    Clientes
+                </a>
+                <a href="#" class="nav-item current-page">
+                    <i class="fas fa-box"></i>
+                    Inventario
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Estadísticas
+                </a>
+            </nav>
+
+            <div class="content">
+                <h2>PANEL • INVENTARIO TARJETA</h2>
+
+                <div class="tabs">
+                    <button class="tab-button active">
+                        VENTAS <i class="fas fa-dollar-sign"></i>
+                    </button>
+                    <button class="tab-button">
+                        LOGISTICA DE VENTAS <i class="fas fa-chart-line"></i>
+                    </button>
+                </div>
+
+                <section class="inventory-control-panel">
+                    
+                    <div class="filter-bar">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Buscar piezas...">
+                        </div>
+                        <div class="category-dropdown">
+                            <button class="dropdown-button">
+                                Categorías <i class="fas fa-caret-down"></i>
+                            </button>
+                            </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Modelo</th>
+                                    <th>Marca</th>
+                                    <th>Subnombre</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>01</td>
+                                    <td>180052</td>
+                                    <td>whirlpool</td>
+                                    <td>whirlpool k24</td>
+                                    <td><button class="icon-btn edit-btn"><i class="fas fa-search-plus"></i></button></td>
+                                    <td><button class="icon-btn delete-btn"><i class="fas fa-minus-circle"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td>02</td>
+                                    <td>202457</td>
+                                    <td>daewo</td>
+                                    <td>daewo sin presostato</td>
+                                    <td><button class="icon-btn edit-btn"><i class="fas fa-search-plus"></i></button></td>
+                                    <td><button class="icon-btn delete-btn"><i class="fas fa-minus-circle"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td>03</td>
+                                    <td>800547</td>
+                                    <td>mabe</td>
+                                    <td>mabe displey derecho</td>
+                                    <td><button class="icon-btn edit-btn"><i class="fas fa-search-plus"></i></button></td>
+                                    <td><button class="icon-btn delete-btn"><i class="fas fa-minus-circle"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td>04</td>
+                                    <td>627140</td>
+                                    <td>LG</td>
+                                    <td>LG inverter</td>
+                                    <td><button class="icon-btn edit-btn"><i class="fas fa-search-plus"></i></button></td>
+                                    <td><button class="icon-btn delete-btn"><i class="fas fa-minus-circle"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <div class="footer-action">
+                    <button class="btn-history">
+                        Historial de tarjetas vendidas <i class="fas fa-file-invoice"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

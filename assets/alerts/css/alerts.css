@@ -1,0 +1,137 @@
+/* ========================================= */
+/* ESTILOS PARA ALERTAS GLOBALES */
+/* ========================================= */
+
+.alert-backdrop {
+  position: fixed;
+  z-index: 2000; /* Encima de las modals (que están en 1000) */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-content {
+  background-color: white;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  padding: 25px;
+  text-align: center;
+  animation: alert-slide-down 0.3s ease-out;
+}
+
+@keyframes alert-slide-down {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.alert-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Colores de Icono */
+.alert-icon.success {
+  background-color: #28a745;
+}
+.alert-icon.error {
+  background-color: #dc3545;
+}
+.alert-icon.warning {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.alert-content h2 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.alert-content p {
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.alert-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #1e2d3b; /* Azul primario */
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.alert-btn:hover {
+  background-color: #2e4153;
+}
+
+/* Caja gris donde salen los datos del producto */
+.alert-details-box {
+    background-color: #f8f9fa;
+    border-left: 4px solid #dc3545; /* Borde rojo a la izquierda */
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Contenedor de botones */
+.alert-actions {
+    display: flex;
+    justify-content: center; /* Centrados */
+    gap: 15px; /* Espacio entre botones */
+}
+
+/* Botón Cancelar (Gris) */
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-cancel:hover { background-color: #5a6268; }
+
+/* Botón Eliminar (Rojo) */
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-delete:hover { background-color: #c82333; }

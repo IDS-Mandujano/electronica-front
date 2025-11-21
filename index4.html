@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELECTRONICA DOMESTICA - Panel Gerente</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-area">
+                <img src="logo.png" alt="Logo Electronica Domestica" class="logo"> 
+                <h1>ELECTRONICA DOMESTICA</h1>
+            </div>
+            <div class="user-info">
+                <span>Mi Perfil</span>
+                <i class="fas fa-user-circle"></i>
+                <a href="#" class="cerrar-sesion">Cerrar Sesión</a>
+            </div>
+        </header>
+
+        <main class="main-layout">
+            <nav class="sidebar">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-bars"></i>
+                    Menú Principal
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    Pedidos
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    Clientes
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-box"></i>
+                    Inventario
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Estadísticas
+                </a>
+            </nav>
+
+            <div class="content">
+                <h2>Menú Principal • Panel Gerente</h2>
+
+                <section class="quick-summary">
+                    <h3>Resumen rápido</h3>
+                    <div class="summary-cards">
+                        <div class="card">
+                            <span class="value">20</span>
+                            <p>Pedidos Pendientes</p>
+                            <i class="fas fa-clock icon-pending"></i>
+                        </div>
+                        <div class="card">
+                            <span class="value">5</span>
+                            <p>En proceso</p>
+                            <i class="fas fa-cog icon-process"></i>
+                        </div>
+                        <div class="card">
+                            <span class="value">14</span>
+                            <p>Finalizados</p>
+                            <i class="fas fa-check-circle icon-finished"></i>
+                        </div>
+                        <div class="card warning">
+                            <span class="value">2</span>
+                            <p>Stock Bajo</p>
+                            <i class="fas fa-exclamation-triangle icon-low-stock"></i>
+                        </div>
+                    </div>
+                </section>
+                
+                <hr> <section class="assigned-orders">
+                    <h3>Pedidos asignados</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Cliente</th>
+                                <th>Descripción</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01</td>
+                                <td>Rolando Espinoza</td>
+                                <td>Tarjeta Dañada</td>
+                                <td>23/09/25</td>
+                                <td><span class="status-label status-process">En proceso</span></td>
+                                <td><button class="btn-action">Actualizar estado</button></td>
+                            </tr>
+                            <tr>
+                                <td>02</td>
+                                <td>Melany Landa</td>
+                                <td>Cambio de tarjeta</td>
+                                <td>22/09/25</td>
+                                <td><span class="status-label status-pending">Pendiente</span></td>
+                                <td><button class="btn-action">Actualizar estado</button></td>
+                            </tr>
+                            <tr>
+                                <td>03</td>
+                                <td>Jeremías Vázquez</td>
+                                <td>Equipo dañado</td>
+                                <td>19/09/25</td>
+                                <td><span class="status-label status-important">Importante</span></td>
+                                <td><button class="btn-action">Actualizar estado</button></td>
+                            </tr>
+                            <tr>
+                                <td>04</td>
+                                <td>Erick Rodríguez</td>
+                                <td>Microondas dañada</td>
+                                <td>18/08/25</td>
+                                <td><span class="status-label status-finished">Finalizado</span></td>
+                                <td><button class="btn-action">Actualizar estado</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                
+                <hr> <div class="footer-actions">
+                    <button class="btn-footer">
+                        <i class="fas fa-list-ul"></i>
+                        Ver todos mis pedidos
+                    </button>
+                    <button class="btn-footer">
+                        <i class="fas fa-history"></i>
+                        Historial de pedidos atendidos
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
