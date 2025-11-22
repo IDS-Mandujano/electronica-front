@@ -191,12 +191,18 @@ document.addEventListener('DOMContentLoaded', function () {
             result = await response.json();
         } catch (e) {
             console.error("❌ Error al parsear respuesta JSON:", e);
+            console.error("Respuesta del servidor (raw):", response.status, response.statusText);
             throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
         }
 
         if (!response.ok) {
-            console.error("❌ Respuesta del servidor:", result);
-            throw new Error(result.message || result.error || `Error: ${response.status} ${response.statusText}`);
+            console.error("❌ Respuesta del servidor completa:", result);
+            console.error("Status:", response.status);
+            console.error("Payload enviado:", data);
+            
+            // Mostrar detalles adicionales si existen
+            const mensaje = result.message || result.error || result.details || `Error: ${response.status} ${response.statusText}`;
+            throw new Error(mensaje);
         }
         return result;
     }
@@ -647,14 +653,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 exito = true;
             }
             else if (formId === 'form-registro-finalizado') {
-                const select = form.querySelector('#finalizado-asignar-tecnico');
+                const selectTecnico = form.querySelector('#finalizado-asignar-tecnico');
+                
+                // Leer valores directamente del DOM, incluyendo campos deshabilitados
+                const nombreClienteInput = form.querySelector('#finalizado-cliente-nombre');
+                const celularInput = form.querySelector('#finalizado-cliente-celular');
+                const marcaInput = form.querySelector('#finalizado-equipo-marca');
+                const modeloInput = form.querySelector('#finalizado-equipo-modelo');
+                const solucionInput = form.querySelector('#finalizado-equipo-problema');
+                
                 const payload = {
-                    registroTarjetaId: datos.registroTarjetaId, nombreCliente: datos.clienteNombre,
-                    numeroCelular: datos.clienteCelular, marca: datos.marca, modelo: datos.modelo,
-                    problemaCambiado: datos.problemaCambiado, tecnicoId: datos.tecnicoId,
-                    tecnicoNombre: select.options[select.selectedIndex].text,
-                    fechaEntrega: datos.fechaEntrega, costoReparacion: datos.costoReparacion
+                    registroTarjetaId: datos.registroTarjetaId,
+                    nombreCliente: nombreClienteInput ? nombreClienteInput.value : datos.clienteNombre,
+                    numeroCelular: celularInput ? celularInput.value : datos.clienteCelular,
+                    marca: marcaInput ? marcaInput.value : datos.marca,
+                    modelo: modeloInput ? modeloInput.value : datos.modelo,
+                    problemaCambiado: solucionInput ? solucionInput.value : datos.problemaCambiado,
+                    tecnicoId: selectTecnico ? selectTecnico.value : datos.tecnicoId,
+                    tecnicoNombre: selectTecnico ? selectTecnico.options[selectTecnico.selectedIndex].text : '',
+                    fechaEntrega: datos.fechaEntrega,
+                    costoReparacion: parseFloat(datos.costoReparacion)
                 };
+                
+                console.log('📤 Enviando payload finalizado:', payload);
                 await sendRequest(`${auth.API_URL}/finalizado`, 'POST', payload, token);
                 mostrarAlerta('success', 'Pedido finalizado');
                 exito = true;

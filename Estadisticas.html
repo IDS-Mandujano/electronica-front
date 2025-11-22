@@ -11,9 +11,13 @@
   <link rel="stylesheet" href="/assets/modals/css/registroproducto.css">
   <link rel="stylesheet" href="/assets/modals/css/registrofinalizado.css">
   <link rel="stylesheet" href="/styles/estadisticas.css">
+
   <script src="/js/auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/js/modals.js"></script>
+  <script src="/js/gerente.js"></script>
   <script src="/js/estadisticas.js"></script>
+
 </head>
 
 <body>
@@ -59,29 +63,30 @@
 
       <section class="summary">
         <div class="card">
-          <h3>Tarjetas Vendidas (Hoy)</h3>
-          <p class="number" id="stats-vendidas-hoy">0</p>
+          <h3>Ingresos (Hoy)</h3>
+          <p class="number" id="stats-ingresos-hoy">$0.00</p>
         </div>
         <div class="card">
-          <h3>Tarjetas Vendidas (Semana)</h3>
-          <p class="number" id="stats-vendidas-semana">0</p>
-        </div>
-        <div class="card">
-          <h3>Tarjetas Vendidas (Mes)</h3>
-          <p class="number" id="stats-vendidas-mes">0</p>
+          <h3>Ingresos (Semana)</h3>
+          <p class="number" id="stats-ingresos-semana">$0.00</p>
         </div>
         <div class="card">
           <h3>Ingresos (Mes)</h3>
           <p class="number" id="stats-ingresos-mes">$0.00</p>
         </div>
+        <div class="card">
+          <h3>Tarjetas Finalizadas (Mes)</h3>
+          <p class="number" id="stats-tarjetas-finalizadas">0</p>
+        </div>
       </section>
 
       <section class="chart-section">
         <div class="chart-header">
-          <h3>Ventas de Tarjetas</h3>
+          <h3>Progreso de Ingresos</h3>
           <div class="chart-filters">
-            <button id="filter-semana" class="filter-btn active">Semana</button>
-            <button id="filter-mes" class="filter-btn">Mes</button>
+            <button id="filter-diario" class="filter-btn">Diario</button>
+            <button id="filter-semanal" class="filter-btn active">Semanal</button>
+            <button id="filter-mensual" class="filter-btn">Mensual</button>
           </div>
         </div>
 

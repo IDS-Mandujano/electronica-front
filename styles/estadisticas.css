@@ -23,7 +23,7 @@
   color: #333;
 }
 
-/* Botones de filtro (Semana/Mes) */
+/* Botones de filtro (Diario/Semanal/Mensual) */
 .chart-filters {
   display: flex;
   border: 1px solid #ddd;
@@ -39,9 +39,10 @@
   font-size: 14px;
   color: #555;
   transition: background-color 0.2s;
+  flex: 1;
 }
 
-.filter-btn:first-of-type {
+.filter-btn:not(:last-of-type) {
   border-right: 1px solid #ddd;
 }
 
