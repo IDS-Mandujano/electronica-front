@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronics Doméstica - Pedidos del Cliente</title>
+
+    <link rel="stylesheet" href="/styles/stiles1.css">
+    <link rel="stylesheet" href="/assets/alerts/css/alerts.css">
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/alerts.js"></script>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="/assets/image/logo.png" alt="Logo">
+                <h2>Electrónica<br>Doméstica</h2>
+            </div>
+
+            <nav>
+                <a href="HomeGerente.html" class="btn">Menú Principal</a>
+                <a href="Pedidos.html" class="btn">Pedidos</a>
+                <a href="Clientes.html" class="btn">Clientes</a>
+
+                <div class="submenu-container">
+                    <button type="button" class="btn btn-submenu">
+                        <span>Inventario</span>
+                        <span class="submenu-arrow">▼</span>
+                    </button>
+
+                    <div class="submenu">
+                        <a href="TarjetasVenta.html" class="btn">Tarjetas en Venta</a>
+                        <a href="MateriaPrima.html" class="btn">Materia Prima</a>
+                        <a href="Estadisticas.html" class="btn">Estadísticas</a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main content -->
+        <main class="content">
+
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <h2>Pedidos del Cliente</h2>
+                    <p style="font-size: 14px; opacity: 0.7;">
+                        Cliente: <span id="cliente-nombre">Cargando...</span> |
+                        Celular: <span id="cliente-celular">---</span>
+                    </p>
+                </div>
+
+                <div class="user-info">
+                    <span class="user-name">Cargando...</span>
+                    <div class="user-icon">👤</div>
+                    <a href="#" class="logout">Cerrar sesión</a>
+                </div>
+            </header>
+
+            <!-- Table section -->
+            <section class="table-section">
+                <div class="table-header">
+                    <h3>Historial de Pedidos</h3>
+                    <a href="Clientes.html" class="btn-back">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Regresar a Clientes
+                    </a>
+
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Producto</th>
+                            <th>Problema / Descripción</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-pedidos">
+                        <tr>
+                            <td colspan="5">Cargando pedidos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+
+    </div>
+
+    <script src="/js/clientepedido.js"></script>
+</body>
+
+</html>

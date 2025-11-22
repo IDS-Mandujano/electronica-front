@@ -493,3 +493,29 @@ tr.stock-bajo-row td {
     background-color: #6c757d; /* Gris */
 }
 
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #0e70b7;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.25s ease;
+    box-shadow: 0px 3px 6px rgba(0,0,0,0.15);
+}
+
+.btn-back:hover {
+    background: #0c5a92;
+    transform: translateY(-2px);
+    box-shadow: 0px 5px 10px rgba(0,0,0,0.20);
+}
+
+.btn-back svg {
+    width: 18px;
+    height: 18px;
+}

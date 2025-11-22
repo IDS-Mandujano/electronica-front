@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
         tableBody.addEventListener('click', function (e) {
             if (e.target.classList.contains('btn-accion')) {
                 const celularCliente = e.target.dataset.celular;
-                alert('Mostrar pedidos del cliente con celular: ' + celularCliente);
+                window.location.href = `ClientePedido.html?celular=${celularCliente}`;
             }
         });
     }
