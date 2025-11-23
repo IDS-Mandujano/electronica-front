@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             tr.innerHTML = `
                 <td>${p.tipo}</td>
                 <td>${p.fecha}</td>
-                <td>${p.marca} ${p.modelo}</td>
+                <td>${p.marca} / ${p.modelo}</td>
                 <td>${p.problema}</td>
                 <td>${p.costo}</td>
             `;
