@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // --- HELPER: Cerrar Modal ---
+    // --- HELPER: Cerrar Modal dinámico (#modal-container) ---
     function cerrarModal() {
         modalContainer.innerHTML = '';
     }
@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // --- HELPER: Mostrar Confirmación Personalizada (CORREGIDO) ---
-    // Reemplaza tu mostrarConfirmacion por esta versión con debug y tolerancia a errores
     function mostrarConfirmacion(titulo, mensaje, detallesHtml = '') {
         return new Promise(async (resolve) => {
             try {
@@ -128,9 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
 
-                // safety timeout opcional (evita que quede colgado para pruebas)
-                // window.setTimeout(() => { if (document.querySelector('.alert-wrapper-temp')) { console.warn('[confirm] timeout - cerrando'); cleanup(false); } }, 120000);
-
             } catch (e) {
                 console.error('[confirm] Error mostrando confirmación, fallback a confirm():', e);
                 // fallback garantizado
@@ -182,14 +178,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const response = await fetch(url, {
             method: method,
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-            body: JSON.stringify(data)
+            body: method !== 'GET' ? JSON.stringify(data) : undefined // No body para GET o DELETE sin data específica
         });
-        if (method === 'DELETE' && response.status === 204) return {};
+
+        // Manejar DELETE con respuesta 204 No Content
+        if (method === 'DELETE' && response.status === 204) return { success: true, message: 'Eliminado sin contenido' };
 
         let result;
         try {
             result = await response.json();
         } catch (e) {
+            // Si no hay contenido JSON y el estado es OK (ej. 200 con cuerpo vacío)
+            if (response.ok) return { success: true, message: 'Petición exitosa sin cuerpo de respuesta JSON' };
+
             console.error("❌ Error al parsear respuesta JSON:", e);
             console.error("Respuesta del servidor (raw):", response.status, response.statusText);
             throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
@@ -199,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("❌ Respuesta del servidor completa:", result);
             console.error("Status:", response.status);
             console.error("Payload enviado:", data);
-            
+
             // Mostrar detalles adicionales si existen
             const mensaje = result.message || result.error || result.details || `Error: ${response.status} ${response.statusText}`;
             throw new Error(mensaje);
@@ -229,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const res = await fetch('/assets/modals/RegistroFinalizado.html');
             modalContainer.innerHTML = await res.text();
             await poblarTecnicos('#finalizado-asignar-tecnico', '#form-registro-finalizado .btn-submit');
-            
+
             // Autocomplete cuando se ingresa ID de tarjeta
             const inputTarjetaId = modalContainer.querySelector('#finalizado-tarjeta-id');
             if (inputTarjetaId) {
@@ -240,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     await autocompletarDatosTarjeta();
                 });
             }
-            
+
             modalContainer.querySelector('.modal-backdrop').style.display = 'flex';
         });
     }
@@ -306,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 solucionInput.value = tarjeta.problemaDescrito || tarjeta.problema || '';
                 solucionInput.disabled = true;
             }
-            
+
             // Autocompletar técnico por ID si existe
             if (tecnicoSelect && tarjeta.tecnicoId) {
                 tecnicoSelect.value = tarjeta.tecnicoId;
@@ -514,7 +515,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // ▼▼▼ NUEVA FUNCIÓN: ABRIR EDITAR ESTADO ▼▼▼
+    // --- ABRIR: EDITAR ESTADO ---
     window.modalActions.abrirModalEditarEstado = async function (id) {
         if (modalContainer.innerHTML !== '') return;
         const auth = window.authUtils;
@@ -554,23 +555,154 @@ document.addEventListener('DOMContentLoaded', function () {
             mostrarAlerta('error', e.message);
         }
     };
-    // ▲▲▲ FIN NUEVA FUNCIÓN ▲▲▲
+
+    // --- ABRIR: EDITAR CLIENTE ---
+    window.modalActions.abrirModalEditarCliente = async function (celular) {
+        if (modalContainer.innerHTML !== '') return;
+
+        const auth = window.authUtils;
+        const token = auth.getUserData().token;
+
+        try {
+            // 1. Buscar datos del cliente
+            // Nota: Si no tienes GET /clientes/{id}, seguimos usando la lógica de buscar en tarjetas
+            // Pero si ya creaste el endpoint, úsalo directo:
+            let clienteEncontrado = null;
+
+            try {
+                const res = await fetch(`${auth.API_URL}/clientes/${celular}`, { headers: { 'Authorization': 'Bearer ' + token } });
+                if (res.ok) {
+                    const json = await res.json();
+                    clienteEncontrado = json.data || json;
+                }
+            } catch (e) { console.warn("Endpoint clientes no disponible, buscando en tarjetas..."); }
+
+            // Fallback: Buscar en tarjetas si el endpoint de clientes no devolvió nada
+            if (!clienteEncontrado) {
+                const resTarjetas = await fetch(`${auth.API_URL}/tarjetas`, { headers: { 'Authorization': 'Bearer ' + token } });
+                const jsonTarjetas = await resTarjetas.json();
+                const tarjetas = jsonTarjetas.data || [];
+                const tarjeta = tarjetas.find(t => t.numeroCelular === celular);
+                if (tarjeta) {
+                    clienteEncontrado = { nombre: tarjeta.nombreCliente, numeroCelular: tarjeta.numeroCelular };
+                }
+            }
+
+            if (!clienteEncontrado) throw new Error("No se encontraron datos del cliente.");
+
+            // 2. Cargar HTML
+            const resHtml = await fetch('/assets/modals-actions/EditarCliente.html');
+            modalContainer.innerHTML = await resHtml.text();
+
+            // 3. Rellenar formulario
+            // ▼▼▼ CLAVE: Guardamos el celular original en el input hidden para usarlo en la URL del PUT ▼▼▼
+            modalContainer.querySelector('#edit-cliente-id').value = clienteEncontrado.numeroCelular;
+
+            modalContainer.querySelector('#edit-cliente-nombre').value = clienteEncontrado.nombre || clienteEncontrado.nombreCliente;
+            modalContainer.querySelector('#edit-cliente-celular').value = clienteEncontrado.numeroCelular;
+
+            modalContainer.querySelector('.modal-backdrop').style.display = 'flex';
+
+        } catch (error) {
+            mostrarAlerta('error', error.message);
+        }
+    };
+
+    // ... (dentro de window.modalActions en modals.js) ...
+
+    // --- ELIMINAR CLIENTE ---
+    window.modalActions.eliminarCliente = async function (celular) {
+        const auth = window.authUtils;
+        const token = auth.getUserData().token;
+
+        // 1. Confirmación con tu modal personalizada
+        const confirmado = await mostrarConfirmacion(
+            'Eliminar Cliente',
+            `¿Estás seguro de eliminar al cliente con celular ${celular}?`
+        );
+
+        if (!confirmado) return;
+
+        try {
+            // 2. Petición a la API
+            const response = await fetch(`${auth.API_URL}/clientes/${celular}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+
+            // 3. Manejo de respuesta exitosa (204 No Content)
+            if (response.status === 204) {
+                mostrarAlerta('success', 'Cliente eliminado correctamente');
+                document.dispatchEvent(new CustomEvent('datosActualizados'));
+                return;
+            }
+
+            // 4. Manejo de otras respuestas
+            const text = await response.text();
+            const result = text ? JSON.parse(text) : { message: "Error desconocido" };
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Error al eliminar');
+            }
+
+            // Si devolvió 200 OK con JSON
+            mostrarAlerta('success', 'Cliente eliminado correctamente');
+            document.dispatchEvent(new CustomEvent('datosActualizados'));
+
+        } catch (e) {
+            mostrarAlerta('error', e.message);
+        }
+    };
+
+
 
     // ==================================================
     // === 3. MANEJO DE EVENTOS (SUBMIT) ===
     // ==================================================
 
-    // --- MANEJO DE EVENTOS ---
+    // --- MANEJO DE CIERRE PARA MODAL ESTATICO DE CLIENTES ---
+    // Esto es necesario porque el modal de clientes NO está dentro de #modal-container
+    const modalEditarCliente = document.getElementById('modal-editar-cliente');
+    if (modalEditarCliente) {
+        const btnCerrar = modalEditarCliente.querySelector('#btn-cerrar-modal-cliente');
+        const btnCancelar = modalEditarCliente.querySelector('#btn-cancelar-modal-cliente');
+        const backdrop = modalEditarCliente.querySelector('.modal-backdrop');
+
+        const cerrarModalCliente = () => {
+            modalEditarCliente.style.display = 'none';
+        };
+
+        if (btnCerrar) btnCerrar.addEventListener('click', cerrarModalCliente);
+        if (btnCancelar) btnCancelar.addEventListener('click', cerrarModalCliente);
+        // Cierre al hacer click en el fondo
+        if (backdrop) {
+            backdrop.addEventListener('click', (e) => {
+                if (e.target === backdrop) {
+                    cerrarModalCliente();
+                }
+            });
+        }
+    }
+
+    // --- MANEJO DE CIERRES PARA MODALES DINÁMICOS ---
     modalContainer.addEventListener('click', (e) => {
         if (e.target.id === 'btn-cerrar-modal' || e.target.id === 'btn-cancelar-modal' || e.target.classList.contains('modal-backdrop')) {
             cerrarModal();
         }
     });
 
-    modalContainer.addEventListener('submit', async (event) => {
-        event.preventDefault();
+    // --- MANEJO DE SUBMITS ---
+    document.addEventListener('submit', async (event) => {
         const form = event.target;
         const formId = form.getAttribute('id');
+
+        // Solo procesamos los formularios que nos interesan (los definidos en este script)
+        if (!['form-editar-cliente', 'form-editar-estado', 'form-editar-producto', 'form-registro-producto', 'form-registro-tarjeta', 'form-registro-finalizado', 'form-editar-finalizado'].includes(formId)) {
+            return;
+        }
+
+        event.preventDefault();
+
         const formData = new FormData(form);
         const datos = Object.fromEntries(formData.entries());
         const auth = window.authUtils;
@@ -585,11 +717,34 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             let exito = false;
 
-            // ... (Lógica de submit de registros y edición) ...
-            if (formId === 'form-editar-estado') {
+            // --- EDICIÓN DE CLIENTE ---
+            if (formId === 'form-editar-cliente') {
+                const idCliente = datos.celularOriginal || datos.id;
+
+                // 2. URL: Usamos el ID original en la ruta
+                const url = `${auth.API_URL}/clientes/${idCliente}`;
+
+                // 3. Body: Enviamos los datos nuevos
+                const payload = {
+                    nombre: datos.nombre,
+                    numeroCelular: datos.celular // El nuevo número (si lo cambió)
+                };
+
+                console.log("📤 Actualizando cliente:", url, payload);
+                cerrarModal()
+
+                // 4. Petición PUT
+                await sendRequest(url, 'PUT', payload, token);
+
+                mostrarAlerta('success', 'Cliente actualizado correctamente');
+                exito = true;
+            }
+
+            // --- EDICIÓN DE ESTADO ---
+            else if (formId === 'form-editar-estado') {
                 // Obtener datos completos de la tarjeta almacenados
                 const tarjetaCompleta = JSON.parse(form.dataset.tarjetaCompleta || '{}');
-                
+
                 const payload = {
                     id: datos.id,
                     nombreCliente: tarjetaCompleta.nombreCliente,
@@ -602,18 +757,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     tecnicoNombre: tarjetaCompleta.tecnicoNombre,
                     fechaRegistro: tarjetaCompleta.fechaRegistro
                 };
-                
+
                 // Si cambiamos a FINALIZADO, agregar fecha de finalización
                 if (datos.estado === 'FINALIZADO' && !tarjetaCompleta.fechaFinalizacion) {
                     payload.fechaFinalizacion = new Date().toISOString().split('T')[0];
                 }
-                
+
                 await sendRequest(`${auth.API_URL}/tarjetas/${datos.id}`, 'PUT', payload, token);
                 mostrarAlerta('success', 'Estado actualizado correctamente');
                 exito = true;
             }
 
-            if (formId === 'form-editar-producto') {
+            // --- EDICIÓN DE PRODUCTO ---
+            else if (formId === 'form-editar-producto') {
                 const payload = {
                     nombreProducto: datos.nombreProducto,
                     categoria: datos.categoria,
@@ -626,6 +782,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 mostrarAlerta('success', 'Producto actualizado');
                 exito = true;
             }
+
+            // --- REGISTRO DE PRODUCTO ---
             else if (formId === 'form-registro-producto') {
                 const payload = {
                     nombreProducto: datos.nombreProducto,
@@ -638,7 +796,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 mostrarAlerta('success', 'Producto creado');
                 exito = true;
             }
-            // ... (Resto de los submits) ...
+
+            // --- REGISTRO DE TARJETA ---
             else if (formId === 'form-registro-tarjeta') {
                 const select = form.querySelector('#asignar-tecnico');
                 const payload = {
@@ -652,34 +811,48 @@ document.addEventListener('DOMContentLoaded', function () {
                 mostrarAlerta('success', 'Tarjeta registrada');
                 exito = true;
             }
+
+            // --- REGISTRO FINALIZADO ---
             else if (formId === 'form-registro-finalizado') {
-                const selectTecnico = form.querySelector('#finalizado-asignar-tecnico');
-                
-                // Leer valores directamente del DOM, incluyendo campos deshabilitados
-                const nombreClienteInput = form.querySelector('#finalizado-cliente-nombre');
+
+                // 1. Obtener referencias directas a los elementos (incluso si están disabled)
+                const tarjetaIdInput = form.querySelector('#finalizado-tarjeta-id');
+                const nombreInput = form.querySelector('#finalizado-cliente-nombre');
                 const celularInput = form.querySelector('#finalizado-cliente-celular');
                 const marcaInput = form.querySelector('#finalizado-equipo-marca');
                 const modeloInput = form.querySelector('#finalizado-equipo-modelo');
-                const solucionInput = form.querySelector('#finalizado-equipo-problema');
-                
+                const problemaInput = form.querySelector('#finalizado-equipo-problema');
+                const selectTecnico = form.querySelector('#finalizado-asignar-tecnico');
+
+                // 2. Construir el payload leyendo .value directamente
                 const payload = {
-                    registroTarjetaId: datos.registroTarjetaId,
-                    nombreCliente: nombreClienteInput ? nombreClienteInput.value : datos.clienteNombre,
+                    // Prioridad: valor del input directo. Si no, lo que tenga formData.
+                    registroTarjetaId: tarjetaIdInput ? tarjetaIdInput.value : datos.registroTarjetaId,
+                    nombreCliente: nombreInput ? nombreInput.value : datos.clienteNombre,
                     numeroCelular: celularInput ? celularInput.value : datos.clienteCelular,
                     marca: marcaInput ? marcaInput.value : datos.marca,
                     modelo: modeloInput ? modeloInput.value : datos.modelo,
-                    problemaCambiado: solucionInput ? solucionInput.value : datos.problemaCambiado,
+                    problemaCambiado: problemaInput ? problemaInput.value : datos.problemaCambiado,
+
+                    // Técnico
                     tecnicoId: selectTecnico ? selectTecnico.value : datos.tecnicoId,
-                    tecnicoNombre: selectTecnico ? selectTecnico.options[selectTecnico.selectedIndex].text : '',
+                    tecnicoNombre: selectTecnico && selectTecnico.selectedIndex >= 0
+                        ? selectTecnico.options[selectTecnico.selectedIndex].text
+                        : '',
+
+                    // Estos campos no suelen estar disabled, así que formData (datos) está bien
                     fechaEntrega: datos.fechaEntrega,
                     costoReparacion: parseFloat(datos.costoReparacion)
                 };
-                
-                console.log('📤 Enviando payload finalizado:', payload);
+
+                console.log('📤 Enviando payload finalizado:', payload); // Debug para ver si el ID va bien
+
                 await sendRequest(`${auth.API_URL}/finalizado`, 'POST', payload, token);
-                mostrarAlerta('success', 'Pedido finalizado');
+                mostrarAlerta('success', 'Pedido finalizado exitosamente');
                 exito = true;
             }
+
+            // --- EDICIÓN DE FINALIZADO ---
             else if (formId === 'form-editar-finalizado') {
                 const payload = {
                     problemaCambiado: datos.problemaCambiado,
@@ -693,6 +866,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (exito) {
                 cerrarModal();
+
                 document.dispatchEvent(new CustomEvent('datosActualizados'));
             }
 

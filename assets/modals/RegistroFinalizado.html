@@ -1,18 +1,16 @@
-<div id="modal-finalizado" class="modal-backdrop modal-finalizado-scope">
+<div class="modal-backdrop modal-finalizado-scope">
     <div class="modal-content">
-        <span class="modal-close" id="btn-cerrar-modal">&times;</span>
-        
         <div class="modal-header-title">
             <h2>Finalizar Pedido</h2>
             <div class="user-icon-small">✔</div>
+            
         </div>
         
         <form id="form-registro-finalizado">
             
             <h3>Datos del Pedido</h3>
-            <label for="finalizado-tarjeta-id">Folio Pedido Original</label>
-            <input type="text" id="finalizado-tarjeta-id" name="registroTarjetaId" placeholder="ID de la tarjeta original (ej: f34a4...)" required>
-
+            <label for="finalizado-tarjeta-id">Folio Pedido Original *</label>
+            <input type="text" id="finalizado-tarjeta-id" name="registroTarjetaId" placeholder="Escanea o escribe el ID (ej: f34a...)" required>
             <label for="finalizado-cliente-nombre">Nombre del cliente</label>
             <input type="text" id="finalizado-cliente-nombre" name="clienteNombre" placeholder="Nombre del cliente" required>
             
@@ -42,7 +40,7 @@
             <input type="date" id="finalizado-fecha-entrega" name="fechaEntrega" required>
 
             <div class="form-buttons">
-                <button type="submit" class="btn-submit" disabled>Guardar y Finalizar</button>
+                <button type="submit" class="btn-submit">Guardar y Finalizar</button>
                 <button type="button" class="btn-cancel" id="btn-cancelar-modal">Cancelar</button>
             </div>
         </form>

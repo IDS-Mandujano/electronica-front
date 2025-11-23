@@ -1,0 +1,124 @@
+/* Modal Editar Cliente */
+.modal-editar-cliente-scope {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center; /* centrar vertical */
+    justify-content: center; /* centrar horizontal */
+    background: rgba(0, 0, 0, 0.5); /* fondo semi-transparente */
+    z-index: 1000;
+    overflow: auto;
+    transition: opacity 0.3s ease;
+}
+
+/* Contenido del modal */
+.modal-editar-cliente-scope .modal-content {
+    background: #fff;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    padding: 20px 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    animation: modalAppear 0.3s ease forwards;
+}
+
+/* Animación de aparición */
+@keyframes modalAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Cabecera del modal */
+.modal-editar-cliente-scope .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.modal-editar-cliente-scope .modal-header h2 {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.modal-editar-cliente-scope .btn-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+/* Formulario dentro del modal */
+.modal-editar-cliente-scope .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-editar-cliente-scope .form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.modal-editar-cliente-scope .form-group input {
+    padding: 8px 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.modal-editar-cliente-scope .form-group input:focus {
+    border-color: #009688; /* color principal */
+}
+
+/* Footer del modal */
+.modal-editar-cliente-scope .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-editar-cliente-scope .btn-cancel {
+    background: #f44336;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.modal-editar-cliente-scope .btn-cancel:hover {
+    background: #d32f2f;
+}
+
+.modal-editar-cliente-scope .btn-submit {
+    background: #009688;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.modal-editar-cliente-scope .btn-submit:hover {
+    background: #00796b;
+}
+
+/* Input oculto */
+.modal-editar-cliente-scope input[type="hidden"] {
+    display: none;
+}
