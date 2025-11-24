@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let todasLasMateriaPrima = [];
     let todasLasTarjetasVenta = [];
 
-    // --- 1. Cargar Materia Prima ---
+    // --- 1. Cargar Materia Prima (TODO EL INVENTARIO) ---
     async function cargarMateriaPrima() {
         if (!auth) return console.error("❌ Error: auth.js no cargado");
 
@@ -33,11 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const json = await res.json();
                 todasLasMateriaPrima = json.data || [];
                 
-                // Filtrar solo productos con stock bajo (< 10)
-                const stockBajo = todasLasMateriaPrima.filter(p => p.cantidadPiezas < 10);
+                // Mostramos TODOS los productos
+                console.log(`✅ Productos cargados: ${todasLasMateriaPrima.length}`);
+                renderizarMateriaPrima(todasLasMateriaPrima);
                 
-                console.log(`✅ Productos totales: ${todasLasMateriaPrima.length}. Stock bajo: ${stockBajo.length}`);
-                renderizarMateriaPrima(stockBajo);
             } else {
                 console.error("❌ Error al obtener materia prima:", res.status);
                 tablaMateriaprima.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Error al cargar materia prima</td></tr>';
@@ -51,78 +50,33 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- 2. Cargar Tarjetas en Venta (Finalizadas) ---
     async function cargarTarjetasVenta() {
         if (!auth) return console.error("❌ Error: auth.js no cargado");
-
-        const userData = auth.getUserData();
-        const token = userData.token;
-
-        if (!token) {
-            console.warn("⚠️ No hay token, redirigiendo...");
-            window.location.href = '/login.html';
-            return;
-        }
+        const token = auth.getUserData().token;
+        if (!token) return;
 
         try {
-            console.log("📡 Cargando tarjetas finalizadas (desde /finalizado y /tarjetas)...");
-
-            const [resFinalizado, resTarjetas] = await Promise.all([
-                fetch(`${auth.API_URL}/finalizado`, { headers: { 'Authorization': 'Bearer ' + token } }),
-                fetch(`${auth.API_URL}/tarjetas`, { headers: { 'Authorization': 'Bearer ' + token } })
-            ]);
-
-            let finalizadosApi = [];
-            if (resFinalizado.ok) {
-                const json = await resFinalizado.json();
-                // La API puede devolver { data: [...] } o directamente un array
-                finalizadosApi = Array.isArray(json) ? json : (json.data || []);
-            } else {
-                console.warn('⚠️ No se pudo cargar /finalizado, continuará con /tarjetas solamente');
-            }
-
-            let tarjetasApi = [];
-            if (resTarjetas.ok) {
-                const jsonT = await resTarjetas.json();
-                tarjetasApi = jsonT.data || [];
-            } else {
-                console.warn('⚠️ No se pudo cargar /tarjetas');
-            }
-
-            // Convertir tarjetasApi con estado FINALIZADO a la forma de finalizado (registroTarjetaId)
-            const finalizadosDesdeTarjetas = tarjetasApi
-                .filter(t => t.estado && t.estado.toUpperCase() === 'FINALIZADO')
-                .map(t => ({
-                    registroTarjetaId: t.id,
-                    nombreCliente: t.nombreCliente || t.clienteNombre || '',
-                    tecnicoNombre: t.tecnicoNombre || t.tecnico || '',
-                    fechaEntrega: t.fechaEntrega || null,
-                    marca: t.marca || t.marcaProducto || '',
-                    modelo: t.modelo || t.modeloProducto || '',
-                    costoReparacion: t.costoReparacion || t.costo || 0
-                }));
-
-            // Unir ambas fuentes y deduplicar por registroTarjetaId
-            const combined = [...finalizadosApi, ...finalizadosDesdeTarjetas];
-            const seen = new Set();
-            todasLasTarjetasVenta = combined.filter(item => {
-                const key = (item.registroTarjetaId || item.id || '').toString();
-                if (!key) return false;
-                if (seen.has(key)) return false;
-                seen.add(key);
-                return true;
-            }).map(item => {
-                // Normalizar campos para el render
-                return {
-                    registroTarjetaId: item.registroTarjetaId || item.id,
-                    nombreCliente: item.nombreCliente || item.nombre || '',
-                    marca: item.marca || item.marcaProducto || '',
-                    modelo: item.modelo || item.modeloProducto || '',
-                    tecnicoNombre: item.tecnicoNombre || item.tecnico || '',
-                    fechaEntrega: item.fechaEntrega || item.fecha || null,
-                    costoReparacion: item.costoReparacion || item.costo || 0
-                };
+            const resFinalizado = await fetch(`${auth.API_URL}/finalizado`, { 
+                headers: { 'Authorization': 'Bearer ' + token } 
             });
 
-            console.log(`✅ Tarjetas finalizadas (combinadas): ${todasLasTarjetasVenta.length}`);
-            renderizarTarjetasVenta(todasLasTarjetasVenta);
+            if (resFinalizado.ok) {
+                const json = await resFinalizado.json();
+                const data = Array.isArray(json) ? json : (json.data || []);
+                
+                todasLasTarjetasVenta = data.map(item => ({
+                    registroTarjetaId: item.registroTarjetaId || item.id,
+                    nombreCliente: item.nombreCliente,
+                    marca: item.marca,
+                    modelo: item.modelo,
+                    tecnicoNombre: item.tecnicoNombre,
+                    fechaEntrega: item.fechaEntrega,
+                    costoReparacion: item.costoReparacion
+                }));
+
+                renderizarTarjetasVenta(todasLasTarjetasVenta);
+
+            } else {
+                tablaTarjetasVenta.innerHTML = '<tr><td colspan="6" style="text-align:center;">No se encontraron tarjetas finalizadas.</td></tr>';
+            }
 
         } catch (error) {
             console.error("❌ Error al cargar tarjetas:", error);
@@ -130,34 +84,41 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // --- 3. Renderizar Materia Prima ---
+    // --- 3. Renderizar Materia Prima (CON ALERTAS VISUALES) ---
     function renderizarMateriaPrima(productos) {
         tablaMateriaprima.innerHTML = '';
 
         if (productos.length === 0) {
-            tablaMateriaprima.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay productos con stock bajo.</td></tr>';
+            tablaMateriaprima.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay productos registrados.</td></tr>';
             return;
         }
 
         productos.forEach(prod => {
             const row = document.createElement('tr');
             
-            // Determinar estado del stock
-            let estadoClass = 'status-default';
-            let estadoTexto = '✓ Normal';
-            
-            if (prod.cantidadPiezas < 3) {
-                estadoClass = 'status-cancelado';
-                estadoTexto = '🔴 CRÍTICO';
-            } else if (prod.cantidadPiezas < 7) {
-                estadoClass = 'status-proceso';
-                estadoTexto = '🟡 Bajo';
+            // Lógica visual de Stock
+            let estadoClass = 'status-entregado'; // Verde (Normal)
+            let estadoTexto = 'Normal';
+            let estiloCantidad = ''; // Estilo extra para el número
+            let iconoAlerta = '';
+
+            // Umbrales: < 5 es Crítico, < 10 es Bajo
+            if (prod.cantidadPiezas < 5) {
+                estadoClass = 'status-cancelado'; // Rojo
+                estadoTexto = 'Crítico';
+                estiloCantidad = 'color: #d90429; font-weight: bold;'; // Texto rojo fuerte
+                iconoAlerta = '⚠️';
+                // row.classList.add('stock-bajo-row'); // Descomenta si quieres toda la fila roja
+            } else if (prod.cantidadPiezas < 10) {
+                estadoClass = 'status-en_proceso'; // Amarillo
+                estadoTexto = 'Bajo';
+                estiloCantidad = 'color: #e59400; font-weight: bold;'; // Texto naranja
             }
 
             row.innerHTML = `
                 <td><strong>${prod.nombreProducto}</strong></td>
                 <td>${prod.categoria}</td>
-                <td style="font-weight: bold; color: #d90429;">${prod.cantidadPiezas}</td>
+                <td style="${estiloCantidad}">${prod.cantidadPiezas} ${iconoAlerta}</td>
                 <td>${prod.unidad || 'N/A'}</td>
                 <td><span class="status-badge ${estadoClass}">${estadoTexto}</span></td>
             `;
@@ -176,14 +137,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         tarjetas.forEach(tarjeta => {
             const row = document.createElement('tr');
+            const costo = parseFloat(tarjeta.costoReparacion || 0).toFixed(2);
             
             row.innerHTML = `
-                <td><small>${tarjeta.registroTarjetaId.substring(0, 8)}...</small></td>
+                <td><small>${tarjeta.registroTarjetaId ? tarjeta.registroTarjetaId.substring(0, 8) : 'N/A'}...</small></td>
                 <td>${tarjeta.nombreCliente}</td>
                 <td>${tarjeta.marca} / ${tarjeta.modelo}</td>
                 <td>${tarjeta.tecnicoNombre || 'Sin Asignar'}</td>
                 <td>${tarjeta.fechaEntrega || 'N/A'}</td>
-                <td><strong>$${tarjeta.costoReparacion || '0'}</strong></td>
+                <td><strong>$${costo}</strong></td>
             `;
             tablaTarjetasVenta.appendChild(row);
         });
@@ -197,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 p.nombreProducto.toLowerCase().includes(termino) ||
                 p.categoria.toLowerCase().includes(termino)
             );
-            renderizarMateriaPrima(filtrados.filter(p => p.cantidadPiezas < 10));
+            renderizarMateriaPrima(filtrados);
         });
     }
 
@@ -217,11 +179,4 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- 7. Inicializar ---
     cargarMateriaPrima();
     cargarTarjetasVenta();
-
-    // Recargar cuando se actualicen datos
-    document.addEventListener('datosActualizados', () => {
-        console.log("🔄 Datos actualizados, recargando inventario...");
-        cargarMateriaPrima();
-        cargarTarjetasVenta();
-    });
 });

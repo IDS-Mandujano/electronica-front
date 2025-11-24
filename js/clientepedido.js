@@ -6,10 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const submenuTriggers = document.querySelectorAll('.btn-submenu');
     submenuTriggers.forEach(trigger => {
         trigger.addEventListener('click', function () {
-            // Alternar clase active en el botón
             trigger.classList.toggle('active');
-            
-            // Controlar la altura del submenú
             const submenu = trigger.nextElementSibling;
             if (submenu.style.maxHeight) {
                 submenu.style.maxHeight = null;
@@ -17,7 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 submenu.style.maxHeight = submenu.scrollHeight + "px";
             }
 
-            // Cerrar otros submenús si los hubiera
             document.querySelectorAll('.btn-submenu.active').forEach(otherTrigger => {
                 if (otherTrigger !== trigger) {
                     otherTrigger.classList.remove('active');
@@ -28,60 +24,63 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     // ==================================================
-    // 2. LÓGICA DE LA PÁGINA (PEDIDOS DEL CLIENTE)
+    // 2. LÓGICA DE PEDIDOS
     // ==================================================
     const params = new URLSearchParams(window.location.search);
     const celularCliente = params.get("celular");
+    const tabla = document.getElementById("tabla-pedidos");
 
     if (!celularCliente) {
-        document.getElementById("tabla-pedidos").innerHTML =
-            "<tr><td colspan='5' style='text-align:center; color:red;'>Error: No se proporcionó número de celular.</td></tr>";
+        tabla.innerHTML = "<tr><td colspan='5' style='text-align:center; color:red;'>Error: No se proporcionó número de celular.</td></tr>";
         return;
     }
 
     const auth = window.authUtils;
-    // Verificar si auth existe antes de usarlo
-    if (!auth) {
-        console.error("Auth.js no cargado");
-        return;
-    }
-    
+    if (!auth) return console.error("Auth.js no cargado");
     const token = auth.getUserData().token;
-    if (!token) {
-        console.error("No token, redirigiendo...");
-        window.location.href = '/login.html';
-        return;
+    if (!token) return window.location.href = '/login.html';
+
+    // --- HELPER: Obtener Badge de Estado ---
+    function obtenerBadgeEstado(estado) {
+        let clase = 'status-default';
+        const est = (estado || '').toUpperCase();
+
+        if (est === 'EN_PROCESO') clase = 'status-en_proceso';
+        else if (est === 'FINALIZADO') clase = 'status-finalizado';
+        else if (est === 'ENTREGADO') clase = 'status-entregado'; // Si tienes esta clase en CSS
+        else if (est === 'PENDIENTE' || est === 'DIAGNOSTICO') clase = 'status-pendiente';
+        else if (est === 'CANCELADO') clase = 'status-cancelado';
+
+        return `<span class="status-badge ${clase}">${estado}</span>`;
     }
 
     async function fetchJSON(url) {
-        const res = await fetch(url, {
-            headers: { "Authorization": "Bearer " + token }
-        });
+        const res = await fetch(url, { headers: { "Authorization": "Bearer " + token } });
         return await res.json();
     }
 
     try {
-        // 🔵 1. Traer tarjetas (pedidos activos)
-        const tarjetasResp = await fetchJSON(`${auth.API_URL}/tarjetas`);
-        const tarjetas = (tarjetasResp.data || []).filter(t => t.numeroCelular === celularCliente);
+        // 1. Traer datos
+        const [tarjetasResp, finalizadosResp] = await Promise.all([
+            fetchJSON(`${auth.API_URL}/tarjetas`),
+            fetchJSON(`${auth.API_URL}/finalizado`)
+        ]);
 
-        // 🔵 2. Traer finalizados (pedidos concluidos)
-        const finalizadosResp = await fetchJSON(`${auth.API_URL}/finalizado`);
-        // La API de finalizados a veces devuelve array directo o {data: []}
+        const tarjetas = (tarjetasResp.data || []).filter(t => t.numeroCelular === celularCliente);
         const listaFinalizados = Array.isArray(finalizadosResp) ? finalizadosResp : (finalizadosResp.data || []);
         const finalizadosCliente = listaFinalizados.filter(f => f.numeroCelular === celularCliente);
 
-        // 🔵 3. Combinar pedidos
+        // 2. Combinar y Mapear
         const pedidos = [
             ...tarjetas.map(t => ({
-                tipo: `<span style="color:orange; font-weight:bold;">${t.estado}</span>`,
+                estado: t.estado,
                 fecha: t.fechaRegistro,
                 producto: `${t.marca} ${t.modelo}`,
                 problema: t.problemaDescrito,
-                total: "Pendiente"
+                total: "Pendiente" // O calcular estimado si tienes
             })),
             ...finalizadosCliente.map(f => ({
-                tipo: `<span style="color:green; font-weight:bold;">FINALIZADO</span>`,
+                estado: "FINALIZADO",
                 fecha: f.fechaEntrega,
                 producto: `${f.marca} ${f.modelo}`,
                 problema: f.problemaCambiado || "Reparación completada",
@@ -89,13 +88,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             }))
         ];
 
-        // 🔵 4. Mostrar datos del cliente en el header
-        const nombreCliente = tarjetas[0]?.nombreCliente || finalizadosCliente[0]?.nombreCliente || "Cliente Desconocido";
+        // 3. Mostrar Datos del Cliente
+        const nombreCliente = tarjetas[0]?.nombreCliente || finalizadosCliente[0]?.nombreCliente || "Cliente";
         document.getElementById("cliente-nombre").textContent = nombreCliente;
         document.getElementById("cliente-celular").textContent = celularCliente;
 
-        // 🔵 5. Renderizar la tabla
-        const tabla = document.getElementById("tabla-pedidos");
+        // 4. Renderizar Tabla
         tabla.innerHTML = "";
 
         if (pedidos.length === 0) {
@@ -103,22 +101,23 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
+        // Ordenar por fecha (opcional)
+        // pedidos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
         pedidos.forEach(p => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td>${p.tipo}</td>
+                <td>${obtenerBadgeEstado(p.estado)}</td>
                 <td>${p.fecha}</td>
                 <td>${p.producto}</td>
                 <td>${p.problema}</td>
-                <td>${p.total}</td>
+                <td><strong>${p.total}</strong></td>
             `;
             tabla.appendChild(tr);
         });
 
     } catch (error) {
         console.error(error);
-        document.getElementById("tabla-pedidos").innerHTML =
-            "<tr><td colspan='5' style='color:red; text-align:center;'>Error al cargar el historial de pedidos</td></tr>";
+        tabla.innerHTML = "<tr><td colspan='5' style='color:red; text-align:center;'>Error al cargar el historial</td></tr>";
     }
-
 });
