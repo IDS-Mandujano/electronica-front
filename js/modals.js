@@ -377,37 +377,87 @@ document.addEventListener('DOMContentLoaded', function () {
     window.modalActions = window.modalActions || {};
 
     // --- ABRIR: EDITAR PRODUCTO ---
+    // --- EDITAR PRODUCTO ---
     window.modalActions.abrirModalEditarProducto = async function (id) {
         if (modalContainer.innerHTML !== '') return;
         const auth = window.authUtils;
         const token = auth.getUserData().token;
 
+        // Obtenemos el rol del usuario
+        const userRole = auth.getUserData().type.toLowerCase(); // 'tecnico' o 'gerente'
+
         try {
+            // 1. Obtener datos
             const resProd = await fetch(`${auth.API_URL}/productos/${id}`, { headers: { 'Authorization': 'Bearer ' + token } });
             if (!resProd.ok) throw new Error('Error al obtener producto');
             const jsonProd = await resProd.json();
             const producto = jsonProd.data;
 
+            // 2. Cargar HTML
             const resHtml = await fetch('/assets/modals-actions/EditarProducto.html');
             if (!resHtml.ok) throw new Error('No se encontró EditarProducto.html');
             modalContainer.innerHTML = await resHtml.text();
 
-            modalContainer.querySelector('#edit-producto-id').value = producto.id;
-            modalContainer.querySelector('#edit-producto-nombre').value = producto.nombreProducto;
-            modalContainer.querySelector('#edit-producto-unidad').value = producto.unidad;
+            // 3. Referencias a los elementos
+            const inputId = modalContainer.querySelector('#edit-producto-id');
+            const inputNombre = modalContainer.querySelector('#edit-producto-nombre');
+            const inputUnidad = modalContainer.querySelector('#edit-producto-unidad');
+            const selectCategoria = modalContainer.querySelector('#edit-producto-categoria');
+            const inputCantidad = modalContainer.querySelector('#edit-producto-cantidad');
+            const inputOhms = modalContainer.querySelector('#edit-producto-ohms');
+            const inputPrecio = modalContainer.querySelector('#edit-producto-precio');
 
-            const catSelect = modalContainer.querySelector('#edit-producto-categoria');
-            catSelect.value = producto.categoria;
-            if (!catSelect.value) {
-                Array.from(catSelect.options).forEach(opt => {
-                    if (opt.value.toLowerCase() === producto.categoria.toLowerCase()) catSelect.value = opt.value;
+            // 4. Rellenar formulario
+            inputId.value = producto.id;
+            inputNombre.value = producto.nombreProducto;
+            inputUnidad.value = producto.unidad;
+
+            selectCategoria.value = producto.categoria;
+            if (!selectCategoria.value) {
+                Array.from(selectCategoria.options).forEach(opt => {
+                    if (opt.value.toLowerCase() === producto.categoria.toLowerCase()) selectCategoria.value = opt.value;
                 });
             }
 
             const cant = producto.cantidad !== undefined ? producto.cantidad : producto.cantidadPiezas;
-            modalContainer.querySelector('#edit-producto-cantidad').value = cant;
-            modalContainer.querySelector('#edit-producto-ohms').value = producto.cantidadOhms || "";
-            modalContainer.querySelector('#edit-producto-precio').value = producto.precioUnitario || "";
+            inputCantidad.value = cant;
+            inputOhms.value = producto.cantidadOhms || "";
+            inputPrecio.value = producto.precioUnitario || "";
+
+
+            // ============================================================
+            // 5. VALIDACIÓN DE ROL (Técnico vs Gerente)
+            // ============================================================
+            if (userRole === 'tecnico') {
+                // El técnico SOLO puede editar la cantidad.
+                // Usamos 'readonly' y estilos para bloquear los demás sin usar 'disabled'
+                // (si usamos disabled, el valor no se envía al guardar y da error).
+
+                // Bloquear Nombre
+                inputNombre.readOnly = true;
+                inputNombre.classList.add('input-readonly'); // Clase gris de tu CSS
+
+                // Bloquear Categoría (Select no tiene readonly, usamos CSS)
+                selectCategoria.style.pointerEvents = 'none';
+                selectCategoria.style.backgroundColor = '#e9ecef';
+                selectCategoria.tabIndex = -1; // Evitar tabulación
+
+                // Bloquear Unidad
+                inputUnidad.style.pointerEvents = 'none';
+                inputUnidad.style.backgroundColor = '#e9ecef';
+                inputUnidad.tabIndex = -1;
+
+                // Bloquear Ohms y Precio
+                inputOhms.readOnly = true;
+                inputOhms.classList.add('input-readonly');
+
+                inputPrecio.readOnly = true;
+                inputPrecio.classList.add('input-readonly');
+
+                // La cantidad se mantiene editable (sin cambios)
+            }
+            // ============================================================
+
 
             modalContainer.querySelector('.modal-backdrop').style.display = 'flex';
 

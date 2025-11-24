@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="assets/modals/css/registroproducto.css">
   <link rel="stylesheet" href="assets/modals/css/registrofinalizado.css">
   <link rel="stylesheet" href="assets/alerts/css/alerts.css">
+  <link rel="stylesheet" href="/assets/modals-actions/css/editarproducto.css">
 
   <script src="js/auth.js"></script>
   <script src="js/alerts.js"></script>
@@ -21,7 +22,7 @@
 
 <body>
   <div class="container">
-    
+
     <aside class="sidebar">
       <div class="logo">
         <img src="/assets/image/logo.png" alt="Logo">
@@ -34,7 +35,7 @@
     </aside>
 
     <main class="content">
-      
+
       <header class="header">
         <div>
           <h2>Inventario • <span class="user-type-display">Técnico</span></h2>
@@ -46,10 +47,9 @@
         </div>
       </header>
 
-      <!-- SECCIÓN: MATERIA PRIMA -->
       <section class="table-section">
         <div class="table-header">
-          <h3>Materia Prima (Stock Bajo)</h3>
+          <h3>Materia Prima</h3>
           <div class="filter-container">
             <input type="search" id="search-materia-prima" class="search-input" placeholder="Buscar producto...">
           </div>
@@ -63,15 +63,17 @@
               <th>Stock (Piezas)</th>
               <th>Unidad</th>
               <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody id="tabla-materia-prima">
-            <tr><td colspan="5" style="text-align:center;">Cargando...</td></tr>
+            <tr>
+              <td colspan="6" style="text-align:center;">Cargando...</td>
+            </tr>
           </tbody>
         </table>
       </section>
 
-      <!-- SECCIÓN: TARJETAS EN VENTA (Finalizadas) -->
       <section class="table-section">
         <div class="table-header">
           <h3>Tarjetas Finalizadas (en Venta)</h3>
@@ -92,7 +94,9 @@
             </tr>
           </thead>
           <tbody id="tabla-tarjetas-venta">
-            <tr><td colspan="6" style="text-align:center;">Cargando...</td></tr>
+            <tr>
+              <td colspan="6" style="text-align:center;">Cargando...</td>
+            </tr>
           </tbody>
         </table>
       </section>

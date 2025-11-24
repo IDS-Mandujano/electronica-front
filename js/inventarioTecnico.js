@@ -32,18 +32,18 @@ document.addEventListener('DOMContentLoaded', function () {
             if (res.ok) {
                 const json = await res.json();
                 todasLasMateriaPrima = json.data || [];
-                
+
                 // Mostramos TODOS los productos
                 console.log(`✅ Productos cargados: ${todasLasMateriaPrima.length}`);
                 renderizarMateriaPrima(todasLasMateriaPrima);
-                
+
             } else {
                 console.error("❌ Error al obtener materia prima:", res.status);
-                tablaMateriaprima.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Error al cargar materia prima</td></tr>';
+                tablaMateriaprima.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Error al cargar materia prima</td></tr>';
             }
         } catch (error) {
             console.error("❌ Error:", error);
-            tablaMateriaprima.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Error de conexión</td></tr>';
+            tablaMateriaprima.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Error de conexión</td></tr>';
         }
     }
 
@@ -54,14 +54,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!token) return;
 
         try {
-            const resFinalizado = await fetch(`${auth.API_URL}/finalizado`, { 
-                headers: { 'Authorization': 'Bearer ' + token } 
+            const resFinalizado = await fetch(`${auth.API_URL}/finalizado`, {
+                headers: { 'Authorization': 'Bearer ' + token }
             });
 
             if (resFinalizado.ok) {
                 const json = await resFinalizado.json();
                 const data = Array.isArray(json) ? json : (json.data || []);
-                
+
                 todasLasTarjetasVenta = data.map(item => ({
                     registroTarjetaId: item.registroTarjetaId || item.id,
                     nombreCliente: item.nombreCliente,
@@ -84,35 +84,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // --- 3. Renderizar Materia Prima (CON ALERTAS VISUALES) ---
+    // --- 3. Renderizar Materia Prima (CON BOTONES) ---
     function renderizarMateriaPrima(productos) {
         tablaMateriaprima.innerHTML = '';
 
         if (productos.length === 0) {
-            tablaMateriaprima.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay productos registrados.</td></tr>';
+            tablaMateriaprima.innerHTML = '<tr><td colspan="6" style="text-align:center;">No hay productos registrados.</td></tr>';
             return;
         }
 
         productos.forEach(prod => {
             const row = document.createElement('tr');
-            
+
             // Lógica visual de Stock
             let estadoClass = 'status-entregado'; // Verde (Normal)
             let estadoTexto = 'Normal';
-            let estiloCantidad = ''; // Estilo extra para el número
+            let estiloCantidad = '';
             let iconoAlerta = '';
 
-            // Umbrales: < 5 es Crítico, < 10 es Bajo
             if (prod.cantidadPiezas < 5) {
                 estadoClass = 'status-cancelado'; // Rojo
                 estadoTexto = 'Crítico';
-                estiloCantidad = 'color: #d90429; font-weight: bold;'; // Texto rojo fuerte
+                estiloCantidad = 'color: #d90429; font-weight: bold;';
                 iconoAlerta = '⚠️';
-                // row.classList.add('stock-bajo-row'); // Descomenta si quieres toda la fila roja
             } else if (prod.cantidadPiezas < 10) {
                 estadoClass = 'status-en_proceso'; // Amarillo
                 estadoTexto = 'Bajo';
-                estiloCantidad = 'color: #e59400; font-weight: bold;'; // Texto naranja
+                estiloCantidad = 'color: #e59400; font-weight: bold;';
             }
 
             row.innerHTML = `
@@ -121,6 +119,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td style="${estiloCantidad}">${prod.cantidadPiezas} ${iconoAlerta}</td>
                 <td>${prod.unidad || 'N/A'}</td>
                 <td><span class="status-badge ${estadoClass}">${estadoTexto}</span></td>
+                <td>
+                    <button class="btn-accion btn-editar" data-id="${prod.id}" style="background:#ffc107; color:#333;">✏️</button>
+                    <button class="btn-accion btn-eliminar" data-id="${prod.id}" style="background:#dc3545; color:white;">🗑️</button>
+                </td>
             `;
             tablaMateriaprima.appendChild(row);
         });
@@ -138,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         tarjetas.forEach(tarjeta => {
             const row = document.createElement('tr');
             const costo = parseFloat(tarjeta.costoReparacion || 0).toFixed(2);
-            
+
             row.innerHTML = `
                 <td><small>${tarjeta.registroTarjetaId ? tarjeta.registroTarjetaId.substring(0, 8) : 'N/A'}...</small></td>
                 <td>${tarjeta.nombreCliente}</td>
@@ -155,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (searchMateriaPrima) {
         searchMateriaPrima.addEventListener('input', (e) => {
             const termino = e.target.value.toLowerCase();
-            const filtrados = todasLasMateriaPrima.filter(p => 
+            const filtrados = todasLasMateriaPrima.filter(p =>
                 p.nombreProducto.toLowerCase().includes(termino) ||
                 p.categoria.toLowerCase().includes(termino)
             );
@@ -167,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (searchTarjetas) {
         searchTarjetas.addEventListener('input', (e) => {
             const termino = e.target.value.toLowerCase();
-            const filtrados = todasLasTarjetasVenta.filter(t => 
+            const filtrados = todasLasTarjetasVenta.filter(t =>
                 t.nombreCliente.toLowerCase().includes(termino) ||
                 t.marca.toLowerCase().includes(termino) ||
                 t.modelo.toLowerCase().includes(termino)
@@ -176,7 +178,37 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- 7. Inicializar ---
+    // --- 7. LISTENERS DE ACCIÓN (Editar/Eliminar Materia Prima) ---
+    if (tablaMateriaprima) {
+        tablaMateriaprima.addEventListener('click', function (e) {
+            const btn = e.target.closest('.btn-accion');
+            if (!btn) return;
+
+            const id = btn.dataset.id;
+            if (!id) return;
+
+            // Verificar si modals.js cargó y tiene las funciones
+            if (!window.modalActions) {
+                console.error("❌ Error: modals.js no cargado correctamente.");
+                return;
+            }
+
+            if (btn.classList.contains('btn-editar')) {
+                window.modalActions.abrirModalEditarProducto(id);
+            } else if (btn.classList.contains('btn-eliminar')) {
+                window.modalActions.eliminarProducto(id);
+            }
+        });
+    }
+
+    // --- 8. Inicializar ---
     cargarMateriaPrima();
     cargarTarjetasVenta();
+
+    // Recargar cuando se actualicen datos (desde modals.js)
+    document.addEventListener('datosActualizados', () => {
+        console.log("🔄 Datos actualizados, recargando inventario...");
+        cargarMateriaPrima();
+        cargarTarjetasVenta();
+    });
 });
