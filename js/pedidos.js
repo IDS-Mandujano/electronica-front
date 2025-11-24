@@ -34,7 +34,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let todosLosPedidos = [];
 
-    // --- RENDERIZADO DE PEDIDOS (CORREGIDO) ---
+    // --- FUNCIÓN SEGURA PARA COPIAR (HTTP y HTTPS) ---
+    function copiarAlPortapapeles(texto) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(texto);
+        } else {
+            return new Promise((resolve, reject) => {
+                try {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = texto;
+                    textArea.style.position = "fixed";
+                    textArea.style.left = "-9999px";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    const success = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    if (success) resolve();
+                    else reject(new Error("Falló execCommand"));
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+    }
+
+    // --- RENDERIZADO DE PEDIDOS ---
     function renderizarTablaPedidos(pedidos) {
         pedidosTableBody.innerHTML = ''; 
         if (pedidos.length === 0) {
@@ -43,14 +68,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         
         pedidos.forEach(pedido => {
-            // 1. Determinar la clase CSS según el estado
             let estadoClass = 'status-default';
             const estado = pedido.estado ? pedido.estado.toUpperCase() : 'UNKNOWN';
 
-            if (estado === 'EN_PROCESO') estadoClass = 'status-en_proceso'; // Amarillo/Naranja
-            else if (estado === 'FINALIZADO') estadoClass = 'status-finalizado'; // Verde
-            else if (estado === 'PENDIENTE_ENTREGA') estadoClass = 'status-pendiente'; // Azul
-            else if (estado === 'CANCELADO') estadoClass = 'status-cancelado'; // Rojo
+            if (estado === 'EN_PROCESO') estadoClass = 'status-en_proceso';
+            else if (estado === 'FINALIZADO') estadoClass = 'status-finalizado';
+            else if (estado === 'PENDIENTE_ENTREGA') estadoClass = 'status-pendiente';
+            else if (estado === 'CANCELADO') estadoClass = 'status-cancelado';
             
             const row = document.createElement('tr');
             const folio = pedido.id ? pedido.id.substring(0, 8) : 'N/A'; 
@@ -89,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         productosStockBajo.forEach(producto => {
             const row = document.createElement('tr');
-            // row.classList.add('stock-bajo-row'); // Opcional
             row.innerHTML = `
                 <td>${producto.nombreProducto}</td>
                 <td>${producto.categoria}</td>
@@ -108,7 +131,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const token = auth.getUserData().token;
         if (!token) return window.location.href = '/login.html';
 
-        // 1. Cargar Pedidos
         if (pedidosTableBody) {
             try {
                 const [resTarjetas, resFinalizado] = await Promise.all([
@@ -120,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const finalizadosResult = resFinalizado.ok ? await resFinalizado.json() : { data: [] };
 
                 const tarjetasApi = tarjetasResult.data || [];
-                // Normalizar finalizados
                 const finalizadosApi = (Array.isArray(finalizadosResult) ? finalizadosResult : (finalizadosResult.data || [])).map(f => ({
                     id: f.registroTarjetaId, 
                     nombreCliente: f.nombreCliente,
@@ -128,11 +149,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     estado: 'FINALIZADO',
                 }));
                 
-                // Unir y eliminar duplicados (si una tarjeta ya se finalizó, mostrar la de finalizados)
-                // (O simplemente mostrarlas todas si prefieres el historial completo)
                 todosLosPedidos = [...tarjetasApi, ...finalizadosApi]; 
                 
-                // Calcular contadores
                 let activos = 0, enProceso = 0, finalizados = 0;
                 todosLosPedidos.forEach(pedido => {
                     const est = pedido.estado;
@@ -153,7 +171,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
         
-        // 2. Cargar Productos
         if (productosTableBody || countStockBajo) {
              try {
                 const response = await fetch(`${auth.API_URL}/productos`, {
@@ -197,17 +214,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Copiar ID
+    // Copiar ID con el Fix HTTP
     if (pedidosTableBody) {
         pedidosTableBody.addEventListener('click', function(e) {
             const btn = e.target.closest('.btn-copiar');
             if (btn) {
                 const folio = btn.dataset.folio; 
                 if (folio) {
-                    navigator.clipboard.writeText(folio).then(() => {
+                    copiarAlPortapapeles(folio).then(() => {
                         const originalText = btn.textContent;
                         btn.textContent = '¡Copiado!';
                         setTimeout(() => btn.textContent = originalText, 2000);
+                    }).catch(err => {
+                        console.error('Error copiado:', err);
+                        if(auth && auth.showAlert) auth.showAlert("Error al copiar");
                     });
                 }
             }

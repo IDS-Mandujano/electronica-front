@@ -5,28 +5,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const alerts = window.alerts || { showError: (m) => alert(m), showSuccess: (m) => alert(m) };
 
     // Referencias del DOM (Tablas)
-    const tarjetasTableBody = document.getElementById('table-body'); // Tabla principal de tarjetas
-    const productosTableBody = document.getElementById('productos-table-body'); // Tabla de stock bajo
-    const finalizadosTableBody = document.getElementById('finalizados-table-body'); // Tabla de finalizados
+    const tarjetasTableBody = document.getElementById('table-body'); 
+    const productosTableBody = document.getElementById('productos-table-body'); 
+    const finalizadosTableBody = document.getElementById('finalizados-table-body'); 
 
-    // Referencias del DOM (Contadores del Dashboard)
+    // Referencias del DOM (Contadores)
     const countActivos = document.getElementById('count-activos');
     const countProceso = document.getElementById('count-proceso');
     const countFinalizados = document.getElementById('count-finalizados');
     const countStockBajo = document.getElementById('count-stock-bajo');
 
-    // --- 1. LÓGICA DEL MENÚ LATERAL (ACORDEÓN) ---
+    // --- 1. LÓGICA DEL MENÚ LATERAL ---
     const submenuTriggers = document.querySelectorAll('.btn-submenu');
     submenuTriggers.forEach(trigger => {
         trigger.addEventListener('click', function () {
-            // Cerrar otros submenús abiertos
             document.querySelectorAll('.btn-submenu.active').forEach(other => {
                 if (other !== trigger) {
                     other.classList.remove('active');
                     other.nextElementSibling.style.maxHeight = null;
                 }
             });
-            // Alternar el actual
             trigger.classList.toggle('active');
             const submenu = trigger.nextElementSibling;
             if (submenu.style.maxHeight) {
@@ -49,14 +47,15 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Mostramos solo las últimas 5 o 10 para el dashboard
         const recientes = tarjetas.slice(0, 10);
 
         recientes.forEach(tarjeta => {
             const row = document.createElement('tr');
             
-            // Obtener clase de estado usando helper centralizado
-            const estadoClass = window.statusHelper.getEstadoClass(tarjeta.estado);
+            let estadoClass = 'status-unknown';
+            if(tarjeta.estado === 'EN_PROCESO') estadoClass = 'status-en_proceso';
+            else if(tarjeta.estado === 'FINALIZADO') estadoClass = 'status-finalizado';
+            else if(tarjeta.estado === 'ENTREGADO') estadoClass = 'status-entregado';
 
             row.innerHTML = `
                 <td title="${tarjeta.id}">${tarjeta.id.substring(0, 8)}...</td>
@@ -78,8 +77,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!productosTableBody) return;
         productosTableBody.innerHTML = '';
 
-        // Filtramos solo los que tienen stock bajo (< 10) para el dashboard
         const stockBajo = productos.filter(p => p.cantidadPiezas < 10);
+
+        if (countStockBajo) {
+            countStockBajo.textContent = stockBajo.length;
+            const cardStock = countStockBajo.closest('.card-stock-bajo');
+            if (cardStock) {
+                if (stockBajo.length > 0) cardStock.classList.add('active');
+                else cardStock.classList.remove('active');
+            }
+        }
 
         if (stockBajo.length === 0) {
             productosTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center">Todo el stock está correcto.</td></tr>';
@@ -88,21 +95,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
         stockBajo.slice(0, 5).forEach(prod => {
             const row = document.createElement('tr');
-            row.classList.add('stock-bajo-row'); // Clase para resaltar en rojo si existe en CSS
             row.innerHTML = `
                 <td>${prod.nombreProducto}</td>
                 <td>${prod.categoria}</td>
                 <td>${prod.unidad}</td>
-                <td style="color: #d9534f; font-weight: bold;">${prod.cantidadPiezas} ⚠️</td>
+                <td style="color: #d90429; font-weight: bold;">${prod.cantidadPiezas} ⚠️</td>
                 <td>
                     <a href="MateriaPrima.html" class="btn-accion">Gestionar</a>
                 </td>
             `;
             productosTableBody.appendChild(row);
         });
-
-        // Actualizar contador de tarjeta
-        if (countStockBajo) countStockBajo.textContent = stockBajo.length;
     }
 
     // C) Pedidos Finalizados Recientes
@@ -117,12 +120,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         finalizados.slice(0, 5).forEach(pedido => {
             const row = document.createElement('tr');
+            const costo = parseFloat(pedido.costoReparacion).toFixed(2);
             row.innerHTML = `
                 <td title="${pedido.registroTarjetaId}">${pedido.registroTarjetaId.substring(0, 8)}...</td>
                 <td>${pedido.nombreCliente}</td>
                 <td>${pedido.tecnicoNombre}</td>
                 <td>${pedido.fechaEntrega}</td>
-                <td>$${pedido.costoReparacion}</td>
+                <td>$${costo}</td>
             `;
             finalizadosTableBody.appendChild(row);
         });
@@ -142,9 +146,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (resTarjetas.ok && dataTarjetas.success) {
                 const tarjetas = dataTarjetas.data;
                 
-                // Actualizar contadores
-                const activos = tarjetas.filter(t => t.estado !== 'FINALIZADO' && t.estado !== 'ENTREGADO').length;
-                const finalizados = tarjetas.filter(t => t.estado === 'FINALIZADO').length;
+                const activos = tarjetas.filter(t => t.estado !== 'FINALIZADO' && t.estado !== 'ENTREGADO' && t.estado !== 'CANCELADO').length;
+                const finalizados = tarjetas.filter(t => t.estado === 'FINALIZADO' || t.estado === 'ENTREGADO').length;
                 const enProceso = tarjetas.filter(t => t.estado === 'EN_PROCESO').length;
 
                 if (countActivos) countActivos.textContent = activos;
@@ -154,18 +157,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 renderizarTablaTarjetas(tarjetas);
             }
 
-            // 2. Cargar Productos (Para Stock Bajo)
+            // 2. Cargar Productos
             const resProd = await fetch(`${auth.API_URL}/productos`, { headers: { 'Authorization': 'Bearer ' + token } });
             const dataProd = await resProd.json();
             if (resProd.ok && dataProd.success) {
                 renderizarTablaProductos(dataProd.data);
             }
 
-            // 3. Cargar Finalizados (Historial)
+            // 3. Cargar Finalizados
             const resFin = await fetch(`${auth.API_URL}/finalizado`, { headers: { 'Authorization': 'Bearer ' + token } });
             if (resFin.ok) {
                 const dataFin = await resFin.json();
-                // La API de finalizado a veces devuelve un array directo, verificamos:
                 const listaFinalizados = Array.isArray(dataFin) ? dataFin : (dataFin.data || []);
                 renderizarTablaFinalizados(listaFinalizados);
             }
@@ -175,25 +177,58 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // --- 4. LISTENER PARA COPIAR ID (SOLUCIÓN) ---
+    // --- FUNCIÓN SEGURA PARA COPIAR (HTTP y HTTPS) ---
+    function copiarAlPortapapeles(texto) {
+        // Intento 1: API Moderna (Solo HTTPS o Localhost)
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(texto);
+        } else {
+            // Intento 2: Método "Legacy" (Funciona en HTTP)
+            return new Promise((resolve, reject) => {
+                try {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = texto;
+                    
+                    // Asegurar que no sea visible
+                    textArea.style.position = "fixed";
+                    textArea.style.left = "-9999px";
+                    textArea.style.top = "0";
+                    document.body.appendChild(textArea);
+                    
+                    textArea.focus();
+                    textArea.select();
+                    
+                    const success = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    if (success) resolve();
+                    else reject(new Error("Falló execCommand"));
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+    }
+
+    // --- 4. LISTENER PARA COPIAR ID ---
     if (tarjetasTableBody) {
         tarjetasTableBody.addEventListener('click', function(e) {
-            // .closest() busca el elemento padre más cercano que coincida con la clase.
-            // Esto arregla el problema si das clic en un icono o texto dentro del botón.
             const btn = e.target.closest('.btn-copiar');
 
             if (btn) {
-                const id = btn.dataset.id; // Obtiene el data-id="${tarjeta.id}"
+                const id = btn.dataset.id; 
                 
                 if (id) {
-                    navigator.clipboard.writeText(id).then(() => {
-                        alerts.showSuccess('Folio copiado al portapapeles');
+                    copiarAlPortapapeles(id).then(() => {
+                        const originalText = btn.innerHTML;
+                        btn.innerHTML = '✅ Copiado';
+                        setTimeout(() => btn.innerHTML = originalText, 1500);
+                        
+                        if(alerts.showSuccess) alerts.showSuccess('Folio copiado al portapapeles');
                     }).catch(err => {
                         console.error('Error al copiar:', err);
-                        alerts.showError('No se pudo copiar el folio');
+                        if(alerts.showError) alerts.showError('No se pudo copiar el folio (Navegador no compatible)');
                     });
-                } else {
-                    console.error("El botón no tiene ID asignado");
                 }
             }
         });
@@ -201,4 +236,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- INICIO ---
     cargarDashboard();
+    
+    document.addEventListener('datosActualizados', cargarDashboard);
 });
