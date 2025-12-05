@@ -1,0 +1,86 @@
+<div id="modal-tarjeta" class="modal-backdrop modal-tarjeta-scope">
+    <div class="modal-content">
+        <span class="modal-close" id="btn-cerrar-modal">&times;</span>
+        <h2>Registrar Tarjeta de Reparación</h2>
+
+        <form id="form-registro-tarjeta">
+            <h3>Datos del Cliente</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cliente-celular">Número de celular</label>
+                    <input type="tel" id="cliente-celular" name="clienteCelular" required
+                        placeholder="Buscar o ingresar nuevo">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cliente-nombre">Nombre</label>
+                    <input type="text" id="cliente-nombre" name="clienteNombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="cliente-apellidos">Apellidos</label>
+                    <input type="text" id="cliente-apellidos" name="clienteApellidos">
+                </div>
+            </div>
+
+            <h3>Datos del Equipo</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="equipo-tipo">Tipo de Equipo</label>
+                    <select id="equipo-tipo" name="equipoTipo" required>
+                        <option value="" disabled selected>Seleccione...</option>
+                        <option value="TV">Televisión</option>
+                        <option value="AUDIO">Audio</option>
+                        <option value="COCINA">Cocina</option>
+                        <option value="COMPUTO">Cómputo</option>
+                        <option value="OTRO">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="equipo-marca">Marca</label>
+                    <select id="equipo-marca" name="equipoMarca" required>
+                        <option value="" disabled selected>Seleccione una marca...</option>
+                        <option value="Whirlpool">Whirlpool</option>
+                        <option value="K24">K24</option>
+                        <option value="Samsung">Samsung</option>
+                        <option value="LG display izquierdo">LG display izquierdo</option>
+                        <option value="LG display derecho">LG display derecho</option>
+                        <option value="Mabe isy">Mabe isy</option>
+                        <option value="Mabe normal">Mabe normal</option>
+                        <option value="LG">LG</option>
+                        <option value="Daewoo">Daewoo</option>
+                        <option value="K27">K27</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="equipo-modelo">Modelo</label>
+                    <input type="text" id="equipo-modelo" name="equipoModelo" required>
+                </div>
+                <div class="form-group">
+                    <label for="equipo-serie">No. Serie (Opcional)</label>
+                    <input type="text" id="equipo-serie" name="equipoSerie">
+                </div>
+            </div>
+
+            <label for="equipo-problema">Problema Reportado</label>
+            <textarea id="equipo-problema" name="equipoProblema" rows="3" required></textarea>
+
+            <h3>Asignación</h3>
+            <label for="asignar-tecnico">Técnico</label>
+            <select id="asignar-tecnico" name="asignarTecnico" required disabled>
+                <option value="" disabled selected>Cargando técnicos...</option>
+            </select>
+
+            <label for="fecha-registro">Fecha de registro</label>
+            <input type="date" id="fecha-registro" name="fechaRegistro" required>
+
+            <div class="form-buttons">
+                <button type="button" class="btn-cancel" id="btn-cancelar-modal">Cancelar</button>
+                <button type="submit" class="btn-submit" disabled>Registrar</button>
+            </div>
+        </form>
+
+    </div>
+</div>

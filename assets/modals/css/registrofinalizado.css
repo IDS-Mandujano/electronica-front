@@ -1,0 +1,165 @@
+/* Estilos compartidos para Registro y Edición de Finalizado */
+.modal-finalizado-scope .modal-backdrop,
+.modal-editar-finalizado-scope .modal-backdrop {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-finalizado-scope .modal-content,
+.modal-editar-finalizado-scope .modal-content {
+    background-color: #ffffff;
+    padding: 30px 35px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 90%;
+    max-width: 550px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slide-down 0.3s ease-out;
+}
+
+.modal-finalizado-scope .modal-close,
+.modal-editar-finalizado-scope .modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.modal-finalizado-scope .modal-close:hover,
+.modal-editar-finalizado-scope .modal-close:hover {
+    color: #333;
+}
+
+/* Encabezado y títulos */
+.modal-finalizado-scope .modal-header-title,
+.modal-editar-finalizado-scope .modal-header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    color: #1e2d3b;
+}
+
+.modal-finalizado-scope .modal-header-title h2,
+.modal-editar-finalizado-scope .modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.modal-finalizado-scope .user-icon-small {
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    padding: 3px 8px;
+    font-size: 16px;
+    line-height: 1;
+    color: #555;
+}
+
+.modal-finalizado-scope .modal-content h3,
+.modal-editar-finalizado-scope .modal-content h3 {
+    font-size: 16px;
+    color: #1e2d3b;
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.modal-finalizado-scope #form-registro-finalizado,
+.modal-editar-finalizado-scope #form-editar-finalizado {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-finalizado-scope #form-registro-finalizado label,
+.modal-editar-finalizado-scope #form-editar-finalizado label {
+    font-weight: 500;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: -8px;
+}
+
+.modal-finalizado-scope #form-registro-finalizado input[type="text"],
+.modal-finalizado-scope #form-registro-finalizado input[type="tel"],
+.modal-finalizado-scope #form-registro-finalizado input[type="date"],
+.modal-finalizado-scope #form-registro-finalizado textarea,
+.modal-finalizado-scope #form-registro-finalizado select,
+.modal-editar-finalizado-scope #form-editar-finalizado input[type="text"],
+.modal-editar-finalizado-scope #form-editar-finalizado input[type="number"],
+.modal-editar-finalizado-scope #form-editar-finalizado input[type="date"],
+.modal-editar-finalizado-scope #form-editar-finalizado textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fcfcfc;
+}
+
+/* Readonly styles for edit modal */
+.modal-editar-finalizado-scope .input-readonly {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+    cursor: not-allowed;
+}
+
+.modal-finalizado-scope .form-buttons,
+.modal-editar-finalizado-scope .modal-footer {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.modal-finalizado-scope .form-buttons button,
+.modal-editar-finalizado-scope .modal-footer button {
+    padding: 10px 22px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.modal-finalizado-scope .form-buttons .btn-submit,
+.modal-editar-finalizado-scope .modal-footer .btn-submit {
+    background-color: #28a745;
+    color: white;
+}
+
+.modal-finalizado-scope .form-buttons .btn-cancel,
+.modal-editar-finalizado-scope .modal-footer .btn-cancel {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+/* Animations */
+@keyframes slide-down {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

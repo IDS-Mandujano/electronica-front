@@ -1,0 +1,244 @@
+:root {
+    --primary-blue: #007BFF;
+    --light-blue: #0056b3;
+    --error-red: #d9534f;
+    --text-color: #333;
+    --light-gray: #f8f8f8;
+    --border-color: #ccc;
+    --illustration-bg: #eaeaea;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--light-gray);
+}
+
+/* ----- CONTENEDOR PRINCIPAL ----- */
+.login-container {
+    display: flex;
+    width: 950px;
+    max-width: 95%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: white;
+}
+
+.illustration-panel {
+    position: relative;
+    flex: 1;
+    background-color: var(--illustration-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+    overflow: hidden;
+    padding: 0; /* eliminamos padding para que la imagen use todo el espacio */
+}
+
+/* Imagen que llena todo el contenedor */
+.logo-side {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* 🔹 Ocupa todo el espacio, recortando si es necesario */
+    object-position: center; /* 🔹 Centra la imagen */
+}
+
+
+.form-panel {
+    flex: 1;
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo-top {
+    width: 35px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.app-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-color);
+    letter-spacing: 1px;
+}
+
+.login-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.login-subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+/* ----- CAMPOS DE FORMULARIO ----- */
+.login-form label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"],
+.login-form input[type="text"],
+.login-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.login-form input:focus,
+.login-form select:focus {
+    border-color: var(--primary-blue);
+}
+
+.error-message {
+    color: var(--error-red);
+    font-size: 0.8rem;
+    margin-top: -5px;
+    margin-bottom: 15px;
+}
+
+/* ----- OPCIONES DE RECORDARME Y CONTRASEÑA ----- */
+.options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.remember-me label {
+    font-weight: normal;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.forgot-password {
+    color: var(--primary-blue);
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* ----- BOTÓN PRINCIPAL ----- */
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 20px;
+}
+
+.login-button:hover {
+    background-color: var(--light-blue);
+}
+
+/* ----- ENLACE DE CREAR CUENTA ----- */
+.signup-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+.signup-row p {
+    color: #666;
+    margin-right: 5px;
+}
+
+.create-account {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.create-account:hover {
+    text-decoration: underline;
+}
+
+/* ----- RESPONSIVE ----- */
+@media (max-width: 768px) {
+    .illustration-panel {
+        display: none;
+    }
+    .form-panel {
+        width: 100%;
+        padding: 40px;
+    }
+    .login-container {
+        width: 90%;
+    }
+}
+
+
+.alert-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 14px 20px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 500;
+    background-color: #e74c3c; /* rojo para error */
+    display: none;
+    z-index: 9999;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+.alert-box.success {
+    background-color: #2ecc71; /* verde para éxito */
+}

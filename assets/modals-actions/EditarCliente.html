@@ -1,0 +1,32 @@
+<div class="modal-backdrop modal-editar-cliente-scope">
+    <div class="modal-content">
+        <div class="modal-header-title">
+            <h2>Editar Cliente</h2>
+            <button type="button" class="btn-close" id="btn-cerrar-modal">&times;</button>
+        </div>
+
+        <form id="form-editar-cliente">
+            <input type="hidden" name="numeroOriginal" id="edit-cliente-numero-original">
+
+            <div class="form-group">
+                <label for="edit-cliente-nombre">Nombre *</label>
+                <input type="text" name="nombre" id="edit-cliente-nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-cliente-apellidos">Apellidos *</label>
+                <input type="text" name="apellidos" id="edit-cliente-apellidos" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-cliente-celular">Número de Celular *</label>
+                <input type="tel" name="numeroCelular" id="edit-cliente-celular" required>
+            </div>
+
+            <div class="form-buttons">
+                <button type="button" class="btn-cancel" id="btn-cancelar-modal">Cancelar</button>
+                <button type="submit" class="btn-submit">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>

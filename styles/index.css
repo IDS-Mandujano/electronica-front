@@ -1,0 +1,272 @@
+/* ---------- RESET ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", Arial, sans-serif;
+    line-height: 1.6;
+    color: #222;
+    background-color: #f8fafc;
+}
+
+/* ---------- CONTAINERS ---------- */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+    background-color: #004aad;
+    color: white;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 0.8rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav a:hover {
+    color: #aad4ff;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 10%;
+    background: linear-gradient(135deg, #004aad, #0077ff);
+    color: white;
+    gap: 2rem;
+}
+
+.hero-content {
+    flex: 1 1 400px;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero .lead {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 500px;
+}
+
+.hero-illustration img {
+    width: 380px;
+    max-width: 100%;
+    border-radius: 12px;
+}
+
+/* ---------- BUTTONS ---------- */
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #ffffff;
+    color: #004aad;
+}
+
+.btn-primary:hover {
+    background-color: #e5e5e5;
+}
+
+.btn-outline {
+    border: 2px solid #ffffff;
+    color: #ffffff;
+}
+
+.btn-outline:hover {
+    background-color: #ffffff;
+    color: #004aad;
+}
+
+.btn-login {
+    background-color: white;
+    color: #004aad;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+}
+
+.btn-register {
+    border: 2px solid white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+}
+
+/* ---------- FEATURES ---------- */
+.features {
+    padding: 4rem 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    background-color: #ffffff;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.feature.reverse {
+    flex-direction: row-reverse;
+}
+
+.feature img {
+    width: 300px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.feature h3 {
+    color: #004aad;
+    margin-bottom: 0.8rem;
+}
+
+/* ---------- SERVICES ---------- */
+.services {
+    padding: 4rem 10%;
+    background-color: #f1f5f9;
+    text-align: center;
+}
+
+.services h3 {
+    color: #004aad;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.service-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.card h4 {
+    color: #004aad;
+    margin-bottom: 0.5rem;
+}
+
+/* ---------- CTA FOOTER ---------- */
+.cta-footer {
+    background: #004aad;
+    color: white;
+    text-align: center;
+    padding: 3rem 10%;
+}
+
+.cta-footer p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+    background-color: #002c6b;
+    color: white;
+    padding: 3rem 10%;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.footer h4 {
+    margin-bottom: 0.8rem;
+    color: #aad4ff;
+}
+
+.footer ul {
+    list-style: none;
+}
+
+.footer-copy {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #aad4ff;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .feature,
+    .feature.reverse {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}

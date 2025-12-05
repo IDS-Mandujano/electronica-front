@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electrónica Doméstica - Inventario Técnico</title>
+
+  <link rel="stylesheet" href="styles/stiles1.css">
+  <link rel="stylesheet" href="assets/modals/css/registrotarjeta.css">
+  <link rel="stylesheet" href="assets/modals/css/registroproducto.css">
+  <link rel="stylesheet" href="assets/modals/css/registrofinalizado.css">
+  <link rel="stylesheet" href="assets/alerts/css/alerts.css">
+  <link rel="stylesheet" href="assets/modals-actions/css/editarproducto.css">
+
+  <script src="js/auth.js"></script>
+  <script src="js/alerts.js"></script>
+  <script src="js/statusHelper.js"></script>
+  <script src="js/modals.js"></script>
+  <script src="js/inventarioTecnico.js"></script>
+</head>
+
+<body>
+  <div class="container">
+
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="assets/image/logo.png" alt="Logo">
+        <h2>Electrónica<br>Doméstica</h2>
+      </div>
+      <nav>
+        <a type="button" href="HomeTecnico.html" class="btn">Menú Principal</a>
+        <a type="button" href="InventarioTecnico.html" class="btn active">Inventario</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+
+      <header class="header">
+        <div>
+          <h2>Inventario • <span class="user-type-display">Técnico</span></h2>
+        </div>
+        <div class="user-info">
+          <span class="user-name">Cargando...</span>
+          <div class="user-icon">👤</div>
+          <a href="#" class="logout">Cerrar sesión</a>
+        </div>
+      </header>
+
+      <section class="table-section">
+        <div class="table-header">
+          <h3>Materia Prima</h3>
+          <div class="filter-container">
+            <input type="search" id="search-materia-prima" class="search-input" placeholder="Buscar producto...">
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Stock (Piezas)</th>
+              <th>Unidad</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-materia-prima">
+            <tr>
+              <td colspan="6" style="text-align:center;">Cargando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="table-section">
+        <div class="table-header">
+          <h3>Tarjetas Finalizadas (en Venta)</h3>
+          <div class="filter-container">
+            <input type="search" id="search-tarjetas" class="search-input" placeholder="Buscar por cliente o modelo...">
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Folio Original</th>
+              <th>Cliente</th>
+              <th>Equipo (Marca/Modelo)</th>
+              <th>Técnico</th>
+              <th>Fecha de Entrega</th>
+              <th>Costo</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-tarjetas-venta">
+            <tr>
+              <td colspan="6" style="text-align:center;">Cargando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="modal-container"></div>
+</body>
+
+</html>

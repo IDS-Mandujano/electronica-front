@@ -1,0 +1,50 @@
+<div id="modal-editar-producto" class="modal-backdrop modal-editar-producto-scope">
+    <div class="modal-content">
+        <span class="modal-close" id="btn-cerrar-modal">&times;</span>
+        
+        <div class="modal-header-title">
+            <h2>Editar Producto</h2>
+            <div class="user-icon-small">📦</div>
+        </div>
+        
+        <form id="form-editar-producto">
+            
+            <input type="hidden" id="edit-producto-id" name="id">
+            
+            <h3>Datos del producto</h3>
+            <label for="edit-producto-nombre">Nombre del producto</label>
+            <input type="text" id="edit-producto-nombre" name="nombreProducto" required>
+            
+            <label for="edit-producto-categoria">Categoría</label>
+            <select id="edit-producto-categoria" name="categoria" required>
+                <option value="" disabled>Seleccionar categoría...</option>
+                <option value="Componente">Componente</option>
+                <option value="Herramienta">Herramienta</option>
+                <option value="Consumible">Consumible</option>
+                <option value="Otro">Otro</option>
+                <option value="Materia prima">Materia prima</option>
+            </select>
+
+            <label for="edit-producto-cantidad">Cantidad</label>
+            <input type="number" id="edit-producto-cantidad" name="cantidadPiezas" placeholder="0" step="1" required>
+
+            <label for="edit-producto-unidad">Unidad</label>
+            <select id="edit-producto-unidad" name="unidad" required>
+                <option value="Piezas">Piezas</option>
+                <option value="Metros">Metros</option>
+                <option value="Kits">Kits</option>
+            </select>
+            
+            <label for="edit-producto-ohms">Cantidad Ohms (Opcional)</label>
+            <input type="number" id="edit-producto-ohms" name="cantidadOhms" placeholder="0.00" step="0.01">
+
+            <label for="edit-producto-precio">Precio Unitario (Opcional)</label>
+            <input type="number" id="edit-producto-precio" name="precioUnitario" placeholder="0.00" step="0.01">
+
+            <div class="form-buttons">
+                <button type="submit" class="btn-submit">Guardar Cambios</button>
+                <button type="button" class="btn-cancel" id="btn-cancelar-modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>

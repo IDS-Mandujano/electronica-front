@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELECTRONICA DOMESTICA - Iniciar Sesión</title>
+    <link rel="stylesheet" href="styles/login.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="illustration-panel">
+            <img src="assets/image/limpieza.png" alt="Logo" class="logo-side">
+        </div>
+
+        <div class="form-panel">
+            <div class="header-logo">
+                <img src="assets/image/logo.png" alt="Logo" class="logo-top">
+                <h1 class="app-title">ELECTRONICA DOMESTICA</h1>
+            </div>
+
+            <h2 class="login-title">Inicia Sesión</h2>
+            <p class="login-subtitle">Inicia sesión o regístrate a tu cuenta para poder entrar</p>
+
+            <form id="loginForm" class="login-form">
+                <label for="email">Correo electrónico*</label>
+                <input type="email" id="email" name="email" required value="243771@ids.upchiapas.edu.mx"
+                    placeholder="Tu correo electrónico">
+
+                <label for="password">Contraseña*</label>
+                <input type="password" id="password" name="password" required value="********"
+                    placeholder="Tu contraseña">
+
+                <p class="error-message" id="errorMessage">"Usuario o contraseña incorrecta"</p>
+
+                <div class="options-row">
+                    <div class="remember-me">
+                        <input type="checkbox" id="recordarme" name="recordarme">
+                        <label for="recordarme">Recordarme</label>
+                    </div>
+                    <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" class="login-button">Iniciar sesión</button>
+
+                
+                <!--
+
+                <div class="signup-row">
+                    <p>¿No tienes cuenta?</p>
+                    <a href="register.html" class="create-account">Crear cuenta</a>
+                </div>
+
+                -->
+                
+                <div class="back-row">
+                    <a href="index.html" class="back-button">← Volver al inicio</a>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    <script src="js/auth.js"></script>
+    <div id="alertBox" class="alert-box"></div>
+</body>
+
+</html>

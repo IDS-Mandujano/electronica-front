@@ -1,0 +1,163 @@
+<div id="modal-usar-material" class="modal-usar-material-scope">
+    <div class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔧 Usar Material en Reparación</h2>
+                <button type="button" id="btn-cerrar-modal-material" class="btn-close">&times;</button>
+            </div>
+
+            <form id="form-usar-material">
+
+                <input type="hidden" id="material-producto-id" name="productoId">
+
+                <div class="form-group">
+                    <label>Producto (Solo lectura)</label>
+                    <input type="text" id="material-producto-nombre" class="input-readonly" readonly>
+                    <small style="color: #666;">Stock disponible: <span id="material-stock-disponible">--</span></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="material-servicio-id">ID de Servicio/Tarjeta *</label>
+                    <input type="text" id="material-servicio-id" name="servicioId" placeholder="abc123..." required>
+                    <small style="color: #666;">Ingresa el ID del servicio donde usarás este material</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="material-cantidad">Cantidad a usar *</label>
+                    <input type="number" id="material-cantidad" name="cantidad" min="1" placeholder="1" required>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn-submit">Registrar Uso</button>
+                    <button type="button" class="btn-cancel" id="btn-cancelar-modal-material">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal-usar-material-scope .modal-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-usar-material-scope .modal-content {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-usar-material-scope .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .modal-usar-material-scope .modal-header h2 {
+        margin: 0;
+        font-size: 24px;
+        color: #2c3e50;
+    }
+
+    .modal-usar-material-scope .btn-close {
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: #95a5a6;
+        transition: color 0.2s;
+    }
+
+    .modal-usar-material-scope .btn-close:hover {
+        color: #e74c3c;
+    }
+
+    .modal-usar-material-scope .form-group {
+        margin-bottom: 20px;
+    }
+
+    .modal-usar-material-scope .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #34495e;
+    }
+
+    .modal-usar-material-scope .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+    }
+
+    .modal-usar-material-scope .form-group input:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    .modal-usar-material-scope .input-readonly {
+        background-color: #f5f5f5;
+        cursor: not-allowed;
+    }
+
+    .modal-usar-material-scope .form-group small {
+        display: block;
+        margin-top: 5px;
+        font-size: 12px;
+    }
+
+    .modal-usar-material-scope .form-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 25px;
+    }
+
+    .modal-usar-material-scope .btn-submit {
+        padding: 12px 24px;
+        background: #27ae60;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .modal-usar-material-scope .btn-submit:hover {
+        background: #229954;
+    }
+
+    .modal-usar-material-scope .btn-cancel {
+        padding: 12px 24px;
+        background: #95a5a6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .modal-usar-material-scope .btn-cancel:hover {
+        background: #7f8c8d;
+    }
+</style>

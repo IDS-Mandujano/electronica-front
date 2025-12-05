@@ -1,0 +1,48 @@
+<div class="modal-backdrop modal-finalizado-scope">
+    <div class="modal-content">
+        <div class="modal-header-title">
+            <h2>Entrega de Producto</h2>
+            <div class="user-icon-small">✔</div>
+            
+        </div>
+        
+        <form id="form-registro-finalizado">
+            
+            <h3>Datos del Pedido</h3>
+            <label for="finalizado-tarjeta-id">Folio Pedido Original *</label>
+            <input type="text" id="finalizado-tarjeta-id" name="registroTarjetaId" placeholder="Escanea o escribe el ID (ej: f34a...)" required>
+            <label for="finalizado-cliente-nombre">Nombre del cliente</label>
+            <input type="text" id="finalizado-cliente-nombre" name="clienteNombre" placeholder="Nombre del cliente" required>
+            
+            <label for="finalizado-cliente-celular">Número de celular</label>
+            <input type="tel" id="finalizado-cliente-celular" name="clienteCelular" placeholder="Número del cliente" required>
+
+            <h3>Datos del Equipo</h3>
+            <label for="finalizado-equipo-marca">Marca</label>
+            <input type="text" id="finalizado-equipo-marca" name="marca" placeholder="Marca del equipo" required>
+            
+            <label for="finalizado-equipo-modelo">Modelo</label>
+            <input type="text" id="finalizado-equipo-modelo" name="modelo" placeholder="Modelo del equipo" required>
+
+            <label for="finalizado-equipo-problema">Solución (lo que se le cambió)</label>
+            <textarea id="finalizado-equipo-problema" name="problemaCambiado" rows="3" placeholder="Describa la reparación o solución..." required></textarea>
+
+            <label for="finalizado-costo">Costo Reparación (MXN)</label>
+            <input type="number" id="finalizado-costo" name="costoReparacion" placeholder="Ej: 350.50" step="0.01" required>
+
+            <h3>Asignación</h3>
+            <label for="finalizado-asignar-tecnico">Técnico</label>
+            <select id="finalizado-asignar-tecnico" name="tecnicoId" required disabled>
+                <option value="" disabled selected>Cargando técnicos...</option>
+            </select>
+            
+            <label for="finalizado-fecha-entrega">Fecha de entrega</label>
+            <input type="date" id="finalizado-fecha-entrega" name="fechaEntrega" required>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn-submit">Guardar y Finalizar</button>
+                <button type="button" class="btn-cancel" id="btn-cancelar-modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>

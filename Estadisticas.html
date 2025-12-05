@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electrónica Doméstica - Estadísticas</title>
+
+  <link rel="stylesheet" href="styles/stiles1.css">
+  <link rel="stylesheet" href="styles/estadisticas.css">
+  <link rel="stylesheet" href="assets/modals/css/registrotarjeta.css">
+  <link rel="stylesheet" href="assets/modals/css/registroproducto.css">
+  <link rel="stylesheet" href="assets/modals/css/registrofinalizado.css">
+  <link rel="stylesheet" href="assets/alerts/css/alerts.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/alerts.js"></script>
+  <script src="js/statusHelper.js"></script>
+  <script src="js/modals.js"></script>
+  <script src="js/estadisticas.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="assets/image/logo.png" alt="Logo">
+        <h2>Electrónica<br>Doméstica</h2>
+      </div>
+
+      <nav>
+        <a type="button" href="HomeGerente.html" class="btn">Menú Principal</a>
+        <a type="button" href="Pedidos.html" class="btn">Pedidos</a>
+        <a type="button" href="Clientes.html" class="btn">Clientes</a>
+
+        <div class="submenu-container">
+          <button type="button" class="btn btn-submenu active">
+            <span>Inventario</span>
+            <span class="submenu-arrow">▼</span>
+          </button>
+
+          <div class="submenu">
+            <a href="TarjetasVenta.html" class="btn">Tarjetas en Venta</a>
+            <a href="MateriaPrima.html" class="btn">Materia Prima</a>
+            <a href="Estadisticas.html" class="btn active">Estadisticas</a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="header">
+        <div>
+          <h2>Estadísticas • <span class="user-type-display">Gerente</span></h2>
+        </div>
+        <div class="user-info">
+          <span class="user-name">Cargando...</span>
+          <div class="user-icon">👤</div>
+          <a href="#" class="logout">Cerrar sesión</a>
+        </div>
+      </header>
+
+      <section class="summary">
+        <div class="card">
+          <h3>Ingresos (Hoy)</h3>
+          <p class="number" id="stats-ingresos-hoy">$0.00</p>
+        </div>
+        <div class="card">
+          <h3>Ingresos (Semana)</h3>
+          <p class="number" id="stats-ingresos-semana">$0.00</p>
+        </div>
+        <div class="card">
+          <h3>Ingresos (Mes)</h3>
+          <p class="number" id="stats-ingresos-mes">$0.00</p>
+        </div>
+        <div class="card">
+          <h3>Tarjetas Finalizadas (Mes)</h3>
+          <p class="number" id="stats-tarjetas-finalizadas">0</p>
+        </div>
+      </section>
+
+      <section class="chart-section">
+        <div class="chart-header">
+          <h3>Progreso de Ingresos</h3>
+          <div class="chart-filters">
+            <button id="filter-diario" class="filter-btn">Diario</button>
+            <button id="filter-semanal" class="filter-btn active">Semanal</button>
+            <button id="filter-mensual" class="filter-btn">Mensual</button>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="ventasChart"></canvas>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="modal-container"></div>
+</body>
+
+</html>

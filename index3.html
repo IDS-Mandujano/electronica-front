@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario - Panel Gerente</title>
+  <link rel="stylesheet" href="inventario-gerente.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="logo.png" alt="Logo">
+        <h2>Electrónica<br>Doméstica</h2>
+      </div>
+      <nav>
+        <button class="btn active">Menú Principal</button>
+        <button class="btn">Pedidos</button>
+        <button class="btn">Clientes</button>
+        <button class="btn">Inventario</button>
+        <button class="btn">Estadísticas</button>
+      </nav>
+    </aside>
+    <main class="content">
+      <header class="header">
+        <h2>Inventario • Panel Gerente</h2>
+        <div class="user-info">
+          <span>Ing. José Ángel Benavente Ruiz</span>
+          <div class="user-icon">👤</div>
+          <a href="#" class="logout">Cerrar sesión</a>
+        </div>
+      </header>
+      <div class="filters">
+        <input type="text" placeholder="🔍 Buscar piezas..." class="search-input">
+        <select class="filter-select">
+          <option>Categorías</option>
+          <option>Capacitores</option>
+          <option>Resistencias</option>
+          <option>Transistores</option>
+        </select>
+        <select class="filter-select">
+          <option>Estado de stock</option>
+          <option>Suficientes</option>
+          <option>Bajo</option>
+          <option>Agotado</option>
+        </select>
+      </div>
+
+      <section class="table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Foto Producto</th>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Disponibles</th>
+              <th>Estado Stock</th>
+              <th>Unidad</th>
+              <th>Editar / Eliminar</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+          </tbody>
+        </table>
+      </section>
+
+      <div class="alerta" id="alerta">
+        <p>⚠️ Alerta: quedan solo <strong>5 piezas</strong> de <strong>capacitores 1 ohm</strong></p>
+      </div>
+    </main>
+  </div>
+
+  <script src="inventario-gerente.js"></script>
+</body>
+</html>

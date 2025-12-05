@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrónica Doméstica - Tarjetas en Venta</title>
+
+    <link rel="stylesheet" href="styles/stiles1.css">
+    <link rel="stylesheet" href="assets/modals/css/registrotarjeta.css">
+    <link rel="stylesheet" href="assets/modals/css/registroproducto.css">
+    <link rel="stylesheet" href="assets/modals/css/registrofinalizado.css">
+    <link rel="stylesheet" href="assets/alerts/css/alerts.css">
+
+    <script src="js/auth.js"></script>
+    <script src="js/alerts.js"></script>
+    <script src="js/statusHelper.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/tarjetasventa.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="assets/image/logo.png" alt="Logo">
+                <h2>Electrónica<br>Doméstica</h2>
+            </div>
+
+            <nav>
+                <a type="button" href="HomeGerente.html" class="btn">Menú Principal</a>
+                <a type="button" href="Pedidos.html" class="btn">Pedidos</a>
+                <a type="button" href="Clientes.html" class="btn">Clientes</a>
+
+                <div class="submenu-container">
+                    <button type="button" class="btn btn-submenu active">
+                        <span>Inventario</span>
+                        <span class="submenu-arrow">▼</span>
+                    </button>
+
+                    <div class="submenu">
+                        <a href="TarjetasVenta.html" class="btn active">Tarjetas en Venta</a>
+                        <a href="MateriaPrima.html" class="btn">Materia Prima</a>
+                        <a href="Estadisticas.html" class="btn">Estadisticas</a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header class="header">
+                <div>
+                    <h2>Tarjetas en Venta • <span class="user-type-display">Gerente</span></h2>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">Cargando...</span>
+                    <div class="user-icon">👤</div>
+                    <a href="#" class="logout">Cerrar sesión</a>
+                </div>
+            </header>
+
+            <section class="table-section">
+                <div class="table-header">
+                    <h3>Lista de Tarjetas Finalizadas (en Venta)</h3>
+                    <div class="filter-container">
+                        <input type="search" id="search-input" class="search-input"
+                            placeholder="Buscar por cliente o modelo...">
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Folio Original</th>
+                            <th>Cliente</th>
+                            <th>Equipo (Marca/Modelo)</th>
+                            <th>Técnico</th>
+                            <th>Fecha de Entrega</th>
+                            <th>Costo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal-container"></div>
+</body>
+
+</html>

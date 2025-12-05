@@ -1,0 +1,44 @@
+<div id="modal-producto" class="modal-backdrop modal-producto-scope">
+    <div class="modal-content">
+        <span class="modal-close" id="btn-cerrar-modal">&times;</span>
+        
+        <div class="modal-header-title">
+            <h2>Registrar Producto</h2>
+            <div class="user-icon-small">📦</div>
+        </div>
+        
+        <form id="form-registro-producto">
+            
+            <h3>Datos del producto</h3>
+            <label for="producto-nombre">Nombre del producto</label>
+            <input type="text" id="producto-nombre" name="nombreProducto" placeholder="Ej: Capacitor Cerámico 104" required>
+            
+            <label for="producto-categoria">Categoría</label>
+            <select id="producto-categoria" name="categoria" required>
+                <option value="" disabled selected>Seleccionar categoría...</option>
+                <option value="Componente">Componente (Capacitor, Resistencia, etc.)</option>
+                <option value="Herramienta">Herramienta</option>
+                <option value="Consumible">Consumible (Estaño, Cintas, etc.)</option>
+                <option value="Otro">Otro</option>
+            </select>
+
+            <label for="producto-cantidad">Cantidad</label>
+            <input type="number" id="producto-cantidad" name="cantidad" placeholder="0" step="1" required>
+
+            <label for="producto-unidad">Unidad</label>
+            <select id="producto-unidad" name="unidad" required>
+                <option value="Piezas">Piezas</option>
+                <option value="Metros">Metros</option>
+                <option value="Kits">Kits</option>
+            </select>
+            
+            <label for="producto-fecha">Fecha de registro</label>
+            <input type="date" id="producto-fecha" name="fechaRegistro" required>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn-submit">Guardar Producto</button>
+                <button type="button" class="btn-cancel" id="btn-cancelar-modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>

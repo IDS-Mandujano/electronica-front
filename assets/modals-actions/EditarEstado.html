@@ -1,0 +1,44 @@
+<div id="modal-editar-estado" class="modal-editar-estado-scope">
+    <div class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Actualizar Estado de Reparación</h2>
+                <button type="button" id="btn-cerrar-modal" class="btn-close">&times;</button>
+            </div>
+        
+        <form id="form-editar-estado">
+            
+            <input type="hidden" name="id" id="edit-estado-id">
+            
+            <div class="form-group">
+                <label>Folio (Solo lectura)</label>
+                <input type="text" id="edit-estado-folio" class="input-readonly" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Cliente / Equipo (Solo lectura)</label>
+                <input type="text" id="edit-estado-info" class="input-readonly" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-estado-select">Nuevo Estado *</label>
+                <select name="estado" id="edit-estado-select" required>
+                    <option value="" disabled>Seleccionar estado...</option>
+                    <option value="EN_PROCESO">En Proceso</option>
+                    <option value="DIAGNOSTICO">Diagnóstico / Pendiente</option>
+                    <option value="FINALIZADO">Finalizado (Reparación completada)</option>
+                    <option value="CANCELADO">Cancelado</option>
+                </select>
+                <small style="color: #666; margin-top: 5px; display: block;">
+                    Nota: Marcar como "FINALIZADO" registrará la fecha de finalización automáticamente.
+                </small>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btn-cancelar-modal" class="btn-cancel">Cancelar</button>
+                <button type="submit" class="btn-submit">Guardar Cambios</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>

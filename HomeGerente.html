@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electrónica Doméstica - Panel Gerente</title>
+
+  <link rel="stylesheet" href="styles/stiles1.css">
+  <link rel="stylesheet" href="assets/modals/css/registrotarjeta.css">
+  <link rel="stylesheet" href="assets/modals/css/registroproducto.css">
+  <link rel="stylesheet" href="assets/modals/css/registrofinalizado.css">
+  <link rel="stylesheet" href="assets/alerts/css/alerts.css">
+
+  <script src="js/auth.js"></script>
+  <script src="js/alerts.js"></script>
+  <script src="js/statusHelper.js"></script>
+  <script src="js/modals.js"></script>
+  <script src="js/gerente.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="assets/image/logo.png" alt="Logo">
+        <h2>Electrónica<br>Doméstica</h2>
+      </div>
+
+      <nav>
+        <a type="button" href="HomeGerente.html" class="btn active">Menú Principal</a>
+        <a type="button" href="Pedidos.html" class="btn">Pedidos</a>
+        <a type="button" href="Clientes.html" class="btn">Clientes</a>
+        <a type="button" href="RegistrarTecnico.html" class="btn">Registrar Técnicos</a>
+
+        <div class="submenu-container">
+          <button type="button" class="btn btn-submenu">
+            <span>Inventario</span>
+            <span class="submenu-arrow">▼</span>
+          </button>
+
+          <div class="submenu">
+            <a href="TarjetasVenta.html" class="btn">Tarjetas en Venta</a>
+            <a href="MateriaPrima.html" class="btn">Materia Prima</a>
+            <a href="Estadisticas.html" class="btn">Estadisticas</a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="header">
+        <div>
+          <h2>Menú Principal • <span class="user-type-display">Gerente</span></h2>
+        </div>
+        <div class="user-info">
+          <span class="user-name">Cargando...</span>
+          <div class="user-icon">👤</div>
+          <a href="#" class="logout">Cerrar sesión</a>
+        </div>
+      </header>
+
+      <section class="summary">
+        <div class="card">
+          <h3>Activos</h3>
+          <p class="number" id="count-activos">0</p>
+        </div>
+        <div class="card">
+          <h3>En Proceso</h3>
+          <p class="number" id="count-proceso">0</p>
+        </div>
+        <div class="card">
+          <h3>Finalizados</h3>
+          <p class="number" id="count-finalizados">0</p>
+        </div>
+        <div class="card card-stock-bajo">
+          <h3>Stock Bajo</h3>
+          <p class="number" id="count-stock-bajo">0</p>
+        </div>
+      </section>
+
+      <div class="controllers">
+        <button id="btn-abrir-modal-tarjeta">Registar tarjeta</button>
+        <button id="btn-abrir-modal-producto">Registrar producto</button>
+        <button id="btn-abrir-modal-finalizado">Entrega de producto</button>
+      </div>
+
+      <section class="table-section">
+        <h3>Tarjetas Recientes</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>No. Folio</th>
+              <th>Cliente</th>
+              <th>Estado</th>
+              <th>Técnico</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+          </tbody>
+        </table>
+      </section>
+
+      <section class="table-section">
+        <h3>Productos Recientes</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Unidad</th>
+              <th>Stock (Piezas)</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="productos-table-body">
+          </tbody>
+        </table>
+      </section>
+
+      <section class="table-section">
+        <h3>Pedidos Finalizados Recientemente</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Folio Original</th>
+              <th>Cliente</th>
+              <th>Técnico</th>
+              <th>Fecha Entrega</th>
+              <th>Costo</th>
+            </tr>
+          </thead>
+          <tbody id="finalizados-table-body">
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="modal-container"></div>
+</body>
+
+</html>
